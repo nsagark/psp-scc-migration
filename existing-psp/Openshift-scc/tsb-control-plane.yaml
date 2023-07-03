@@ -1,0 +1,98 @@
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegeEscalation: true
+allowPrivilegedContainer: false
+allowedCapabilities: null
+apiVersion: security.openshift.io/v1
+defaultAddCapabilities: null
+fsGroup:
+  ranges:
+  - max: 1400
+    min: 1000
+  type: MustRunAs
+groups: []
+kind: SecurityContextConstraints
+metadata:
+  annotations:
+    kubernetes.io/description: SCC used by TSB ControlPlane components
+    platform.tsb.tetrate.io/application: istio-operator
+    platform.tsb.tetrate.io/component: istio
+    platform.tsb.tetrate.io/plane: control
+    tsb.tetrate.io/contentHash: 42336383cf4c7233
+  creationTimestamp: "2023-03-18T01:11:58Z"
+  generation: 1
+  managedFields:
+  - apiVersion: security.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:allowHostDirVolumePlugin: {}
+      f:allowHostIPC: {}
+      f:allowHostNetwork: {}
+      f:allowHostPID: {}
+      f:allowHostPorts: {}
+      f:allowPrivilegeEscalation: {}
+      f:allowPrivilegedContainer: {}
+      f:allowedCapabilities: {}
+      f:defaultAddCapabilities: {}
+      f:fsGroup:
+        .: {}
+        f:ranges: {}
+        f:type: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubernetes.io/description: {}
+          f:platform.tsb.tetrate.io/application: {}
+          f:platform.tsb.tetrate.io/component: {}
+          f:platform.tsb.tetrate.io/plane: {}
+          f:tsb.tetrate.io/contentHash: {}
+      f:priority: {}
+      f:readOnlyRootFilesystem: {}
+      f:requiredDropCapabilities: {}
+      f:runAsUser:
+        .: {}
+        f:type: {}
+        f:uidRangeMax: {}
+        f:uidRangeMin: {}
+      f:seLinuxContext:
+        .: {}
+        f:type: {}
+      f:supplementalGroups:
+        .: {}
+        f:type: {}
+      f:users: {}
+      f:volumes: {}
+    manager: tsboperator-server
+    operation: Update
+    time: "2023-03-18T01:11:58Z"
+  name: tsb-controlplane
+  resourceVersion: "1152682597"
+  uid: 2574b248-c7d0-4bd7-9af1-022c4f815ece
+priority: null
+readOnlyRootFilesystem: false
+requiredDropCapabilities:
+- MKNOD
+runAsUser:
+  type: MustRunAsRange
+  uidRangeMax: 1400
+  uidRangeMin: 1000
+seLinuxContext:
+  type: MustRunAs
+supplementalGroups:
+  type: RunAsAny
+users:
+- system:serviceaccount:istio-system:xcp-edge
+- system:serviceaccount:istio-system:istiod
+- system:serviceaccount:istio-system:istio-system-oap
+- system:serviceaccount:istio-system:vmgateway-service-account
+- system:serviceaccount:kube-system:istio-cni
+volumes:
+- configMap
+- downwardAPI
+- emptyDir
+- persistentVolumeClaim
+- projected
+- secret
