@@ -1,0 +1,89 @@
+allowHostDirVolumePlugin: true
+allowHostIPC: false
+allowHostNetwork: true
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegeEscalation: true
+allowPrivilegedContainer: false
+allowedCapabilities: null
+apiVersion: security.openshift.io/v1
+defaultAddCapabilities: null
+fsGroup:
+  type: MustRunAs
+groups: []
+kind: SecurityContextConstraints
+metadata:
+  annotations:
+    include.release.openshift.io/self-managed-high-availability: "true"
+    kubernetes.io/description: machine-api-termination-handler allows the machine-api-termination-handler
+      service account to run as root, access host paths and access the host network.
+      This SCC is limited and should not be used for any other service.
+  creationTimestamp: "2022-04-30T16:39:24Z"
+  generation: 1
+  managedFields:
+  - apiVersion: security.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:allowHostDirVolumePlugin: {}
+      f:allowHostIPC: {}
+      f:allowHostNetwork: {}
+      f:allowHostPID: {}
+      f:allowHostPorts: {}
+      f:allowPrivilegedContainer: {}
+      f:allowedCapabilities: {}
+      f:defaultAddCapabilities: {}
+      f:fsGroup:
+        .: {}
+        f:type: {}
+      f:groups: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:include.release.openshift.io/self-managed-high-availability: {}
+          f:kubernetes.io/description: {}
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"3a3cf2a3-760c-4052-b148-8664342dcd52"}: {}
+      f:priority: {}
+      f:readOnlyRootFilesystem: {}
+      f:requiredDropCapabilities: {}
+      f:runAsUser:
+        .: {}
+        f:type: {}
+      f:seLinuxContext:
+        .: {}
+        f:type: {}
+      f:supplementalGroups:
+        .: {}
+        f:type: {}
+      f:users: {}
+      f:volumes: {}
+    manager: cluster-version-operator
+    operation: Update
+    time: "2022-04-30T16:39:24Z"
+  name: machine-api-termination-handler
+  ownerReferences:
+  - apiVersion: config.openshift.io/v1
+    kind: ClusterVersion
+    name: version
+    uid: 3a3cf2a3-760c-4052-b148-8664342dcd52
+  resourceVersion: "2446"
+  uid: 23bb445f-da56-461e-b6b0-ee1c986d59b4
+priority: null
+readOnlyRootFilesystem: false
+requiredDropCapabilities:
+- KILL
+- MKNOD
+- SETUID
+- SETGID
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: MustRunAs
+supplementalGroups:
+  type: MustRunAs
+users:
+- system:serviceaccount:openshift-machine-api:machine-api-termination-handler
+volumes:
+- downwardAPI
+- hostPath

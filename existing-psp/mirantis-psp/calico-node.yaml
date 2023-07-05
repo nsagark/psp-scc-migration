@@ -1,0 +1,85 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+  creationTimestamp: "2023-02-03T13:46:58Z"
+  managedFields:
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:seccomp.security.alpha.kubernetes.io/allowedProfileNames: {}
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"b547be5e-6734-4835-82d4-14eda3dfa4e3"}:
+            .: {}
+            f:apiVersion: {}
+            f:blockOwnerDeletion: {}
+            f:controller: {}
+            f:kind: {}
+            f:name: {}
+            f:uid: {}
+      f:spec:
+        f:allowPrivilegeEscalation: {}
+        f:fsGroup:
+          f:ranges: {}
+          f:rule: {}
+        f:hostNetwork: {}
+        f:hostPorts: {}
+        f:privileged: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          f:rule: {}
+        f:seLinux:
+          f:rule: {}
+        f:supplementalGroups:
+          f:ranges: {}
+          f:rule: {}
+        f:volumes: {}
+    manager: operator
+    operation: Update
+    time: "2023-02-03T13:46:58Z"
+  name: calico-node
+  ownerReferences:
+  - apiVersion: operator.tigera.io/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: Installation
+    name: default
+    uid: b547be5e-6734-4835-82d4-14eda3dfa4e3
+  resourceVersion: "121942645"
+  uid: 980c2336-0ee9-4407-b579-1dfbff8f99f0
+spec:
+  allowPrivilegeEscalation: true
+  fsGroup:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  hostNetwork: true
+  hostPorts:
+  - max: 65535
+    min: 0
+  privileged: true
+  requiredDropCapabilities:
+  - ALL
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  volumes:
+  - configMap
+  - emptyDir
+  - projected
+  - secret
+  - downwardAPI
+  - persistentVolumeClaim
+  - hostPath

@@ -1,0 +1,81 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+  creationTimestamp: "2023-02-03T13:47:37Z"
+  managedFields:
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:seccomp.security.alpha.kubernetes.io/allowedProfileNames: {}
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"3d11fb5a-164d-40f5-9e52-8900a618cb86"}:
+            .: {}
+            f:apiVersion: {}
+            f:blockOwnerDeletion: {}
+            f:controller: {}
+            f:kind: {}
+            f:name: {}
+            f:uid: {}
+      f:spec:
+        f:allowPrivilegeEscalation: {}
+        f:fsGroup:
+          f:ranges: {}
+          f:rule: {}
+        f:hostPorts: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          f:rule: {}
+        f:seLinux:
+          f:rule: {}
+        f:supplementalGroups:
+          f:ranges: {}
+          f:rule: {}
+        f:volumes: {}
+    manager: operator
+    operation: Update
+    time: "2023-02-03T13:47:37Z"
+  name: tigera-apiserver
+  ownerReferences:
+  - apiVersion: operator.tigera.io/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: APIServer
+    name: tigera-secure
+    uid: 3d11fb5a-164d-40f5-9e52-8900a618cb86
+  resourceVersion: "121944046"
+  uid: fa042afb-ca85-4886-9498-01c51511fcf4
+spec:
+  allowPrivilegeEscalation: false
+  fsGroup:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  hostPorts:
+  - max: 65535
+    min: 0
+  requiredDropCapabilities:
+  - ALL
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  volumes:
+  - configMap
+  - emptyDir
+  - projected
+  - secret
+  - downwardAPI
+  - persistentVolumeClaim
+  - hostPath

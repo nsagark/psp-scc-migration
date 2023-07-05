@@ -1,0 +1,74 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"policy/v1beta1","kind":"PodSecurityPolicy","metadata":{"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames":"*"},"labels":{"visa.com/appname":"oce-ex-02-kustomize"},"name":"visa-privileged"},"spec":{"allowPrivilegeEscalation":true,"allowedCapabilities":["*"],"fsGroup":{"rule":"RunAsAny"},"hostIPC":true,"hostNetwork":true,"hostPID":true,"hostPorts":[{"max":65535,"min":0}],"privileged":true,"runAsUser":{"rule":"RunAsAny"},"seLinux":{"rule":"RunAsAny"},"supplementalGroups":{"rule":"RunAsAny"},"volumes":["*"]}}
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+  creationTimestamp: "2022-09-29T18:52:27Z"
+  labels:
+    visa.com/appname: oce-ex-02-kustomize
+  managedFields:
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:seccomp.security.alpha.kubernetes.io/allowedProfileNames: {}
+      f:spec:
+        f:allowPrivilegeEscalation: {}
+        f:allowedCapabilities: {}
+        f:fsGroup:
+          f:rule: {}
+        f:hostIPC: {}
+        f:hostNetwork: {}
+        f:hostPID: {}
+        f:hostPorts: {}
+        f:privileged: {}
+        f:runAsUser:
+          f:rule: {}
+        f:seLinux:
+          f:rule: {}
+        f:supplementalGroups:
+          f:rule: {}
+        f:volumes: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2023-01-12T04:09:09Z"
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+        f:labels:
+          .: {}
+          f:visa.com/appname: {}
+    manager: argocd-application-controller
+    operation: Update
+    time: "2023-01-24T23:55:15Z"
+  name: visa-privileged
+  resourceVersion: "107675778"
+  uid: 892f96ed-32cb-4097-b210-a57367e3a58d
+spec:
+  allowPrivilegeEscalation: true
+  allowedCapabilities:
+  - '*'
+  fsGroup:
+    rule: RunAsAny
+  hostIPC: true
+  hostNetwork: true
+  hostPID: true
+  hostPorts:
+  - max: 65535
+    min: 0
+  privileged: true
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    rule: RunAsAny
+  volumes:
+  - '*'

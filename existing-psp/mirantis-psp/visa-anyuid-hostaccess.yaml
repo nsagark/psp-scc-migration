@@ -1,0 +1,92 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"policy/v1beta1","kind":"PodSecurityPolicy","metadata":{"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames":"docker/default","seccomp.security.alpha.kubernetes.io/defaultProfileName":"docker/default"},"labels":{"visa.com/appname":"oce-ex-02-kustomize"},"name":"visa-anyuid-hostaccess"},"spec":{"allowPrivilegeEscalation":false,"allowedHostPaths":[{"pathPrefix":"/var","readOnly":true},{"pathPrefix":"/etc","readOnly":true},{"pathPrefix":"/run","readOnly":true}],"fsGroup":{"ranges":[{"max":65535,"min":1}],"rule":"MustRunAs"},"hostIPC":false,"hostNetwork":false,"hostPID":false,"privileged":false,"readOnlyRootFilesystem":true,"requiredDropCapabilities":["KILL","MKNOD","SYS_CHROOT","SETUID","SETGID","NET_RAW"],"runAsUser":{"rule":"RunAsAny"},"seLinux":{"rule":"RunAsAny"},"supplementalGroups":{"ranges":[{"max":65535,"min":1}],"rule":"MustRunAs"},"volumes":["configMap","emptyDir","projected","secret","downwardAPI","persistentVolumeClaim"]}}
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: docker/default
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: docker/default
+  creationTimestamp: "2022-10-06T14:38:53Z"
+  labels:
+    visa.com/appname: oce-ex-02-kustomize
+  managedFields:
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:seccomp.security.alpha.kubernetes.io/allowedProfileNames: {}
+          f:seccomp.security.alpha.kubernetes.io/defaultProfileName: {}
+      f:spec:
+        f:allowPrivilegeEscalation: {}
+        f:allowedHostPaths: {}
+        f:fsGroup:
+          f:ranges: {}
+          f:rule: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          f:rule: {}
+        f:seLinux:
+          f:rule: {}
+        f:supplementalGroups:
+          f:ranges: {}
+          f:rule: {}
+        f:volumes: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2023-01-12T04:09:09Z"
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+        f:labels:
+          .: {}
+          f:visa.com/appname: {}
+    manager: argocd-application-controller
+    operation: Update
+    time: "2023-01-24T23:55:15Z"
+  name: visa-anyuid-hostaccess
+  resourceVersion: "107675776"
+  uid: 11f7eb75-365a-4561-93f3-24d278b24893
+spec:
+  allowPrivilegeEscalation: false
+  allowedHostPaths:
+  - pathPrefix: /var
+    readOnly: true
+  - pathPrefix: /etc
+    readOnly: true
+  - pathPrefix: /run
+    readOnly: true
+  fsGroup:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  readOnlyRootFilesystem: true
+  requiredDropCapabilities:
+  - KILL
+  - MKNOD
+  - SYS_CHROOT
+  - SETUID
+  - SETGID
+  - NET_RAW
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  volumes:
+  - configMap
+  - emptyDir
+  - projected
+  - secret
+  - downwardAPI
+  - persistentVolumeClaim

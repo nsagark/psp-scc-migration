@@ -1,0 +1,98 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"policy/v1beta1","kind":"PodSecurityPolicy","metadata":{"annotations":{"seccomp.security.alpha.kubernetes.io/allowedProfileNames":"*"},"name":"tigera-operator"},"spec":{"allowPrivilegeEscalation":false,"fsGroup":{"ranges":[{"max":65535,"min":1}],"rule":"MustRunAs"},"hostIPC":false,"hostNetwork":true,"hostPID":false,"hostPorts":[{"max":65535,"min":0}],"privileged":false,"readOnlyRootFilesystem":false,"requiredDropCapabilities":["ALL"],"runAsUser":{"rule":"MustRunAsNonRoot"},"seLinux":{"rule":"RunAsAny"},"supplementalGroups":{"ranges":[{"max":65535,"min":1}],"rule":"MustRunAs"},"volumes":["hostPath","configMap","emptyDir","projected","secret","downwardAPI","persistentVolumeClaim"]}}
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+  creationTimestamp: "2023-02-03T13:45:55Z"
+  managedFields:
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:seccomp.security.alpha.kubernetes.io/allowedProfileNames: {}
+      f:spec:
+        f:allowPrivilegeEscalation: {}
+        f:fsGroup:
+          f:ranges: {}
+          f:rule: {}
+        f:hostIPC: {}
+        f:hostNetwork: {}
+        f:hostPID: {}
+        f:hostPorts: {}
+        f:privileged: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          f:rule: {}
+        f:seLinux:
+          f:rule: {}
+        f:supplementalGroups:
+          f:ranges: {}
+          f:rule: {}
+        f:volumes: {}
+    manager: kubectl
+    operation: Apply
+    time: "2023-06-27T05:38:59Z"
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+          f:seccomp.security.alpha.kubernetes.io/allowedProfileNames: {}
+      f:spec:
+        f:allowPrivilegeEscalation: {}
+        f:fsGroup:
+          f:ranges: {}
+          f:rule: {}
+        f:hostNetwork: {}
+        f:hostPorts: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          f:rule: {}
+        f:seLinux:
+          f:rule: {}
+        f:supplementalGroups:
+          f:ranges: {}
+          f:rule: {}
+        f:volumes: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2023-02-03T13:45:55Z"
+  name: tigera-operator
+  resourceVersion: "364695243"
+  uid: 4fb17fd3-5f8e-4afd-9318-e15f33b02947
+spec:
+  allowPrivilegeEscalation: false
+  fsGroup:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  hostNetwork: true
+  hostPorts:
+  - max: 65535
+    min: 0
+  requiredDropCapabilities:
+  - ALL
+  runAsUser:
+    rule: MustRunAsNonRoot
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  volumes:
+  - hostPath
+  - configMap
+  - emptyDir
+  - projected
+  - secret
+  - downwardAPI
+  - persistentVolumeClaim

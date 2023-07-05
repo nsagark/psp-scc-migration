@@ -1,0 +1,80 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+  creationTimestamp: "2023-02-03T13:46:59Z"
+  managedFields:
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:seccomp.security.alpha.kubernetes.io/allowedProfileNames: {}
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"b547be5e-6734-4835-82d4-14eda3dfa4e3"}:
+            .: {}
+            f:apiVersion: {}
+            f:blockOwnerDeletion: {}
+            f:controller: {}
+            f:kind: {}
+            f:name: {}
+            f:uid: {}
+      f:spec:
+        f:allowPrivilegeEscalation: {}
+        f:fsGroup:
+          f:ranges: {}
+          f:rule: {}
+        f:hostPorts: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          f:rule: {}
+        f:seLinux:
+          f:rule: {}
+        f:supplementalGroups:
+          f:ranges: {}
+          f:rule: {}
+        f:volumes: {}
+    manager: operator
+    operation: Update
+    time: "2023-02-03T13:46:59Z"
+  name: calico-kube-controllers
+  ownerReferences:
+  - apiVersion: operator.tigera.io/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: Installation
+    name: default
+    uid: b547be5e-6734-4835-82d4-14eda3dfa4e3
+  resourceVersion: "121942668"
+  uid: 901dc953-fb42-4258-89e6-f36fffcd9a4b
+spec:
+  allowPrivilegeEscalation: false
+  fsGroup:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  hostPorts:
+  - max: 65535
+    min: 0
+  requiredDropCapabilities:
+  - ALL
+  runAsUser:
+    rule: MustRunAsNonRoot
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    ranges:
+    - max: 65535
+      min: 1
+    rule: MustRunAs
+  volumes:
+  - configMap
+  - emptyDir
+  - projected
+  - secret
+  - downwardAPI
+  - persistentVolumeClaim

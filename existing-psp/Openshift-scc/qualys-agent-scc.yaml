@@ -1,0 +1,68 @@
+allowHostDirVolumePlugin: true
+allowHostIPC: true
+allowHostNetwork: true
+allowHostPID: true
+allowHostPorts: true
+allowPrivilegeEscalation: true
+allowPrivilegedContainer: true
+allowedCapabilities: null
+apiVersion: security.openshift.io/v1
+defaultAddCapabilities: null
+fsGroup:
+  type: RunAsAny
+groups: []
+kind: SecurityContextConstraints
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"allowHostDirVolumePlugin":true,"allowHostIPC":true,"allowHostNetwork":true,"allowHostPID":true,"allowHostPorts":true,"allowPrivilegedContainer":true,"apiVersion":"security.openshift.io/v1","kind":"SecurityContextConstraints","metadata":{"annotations":{},"name":"qualys-agent-scc"},"readOnlyRootFilesystem":false,"runAsUser":{"type":"RunAsAny"},"seLinuxContext":{"type":"RunAsAny"},"users":["system:serviceaccount:qualys-agent:qualys-agent-sa"]}
+  creationTimestamp: "2022-06-01T16:08:38Z"
+  generation: 1
+  managedFields:
+  - apiVersion: security.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:allowHostDirVolumePlugin: {}
+      f:allowHostIPC: {}
+      f:allowHostNetwork: {}
+      f:allowHostPID: {}
+      f:allowHostPorts: {}
+      f:allowPrivilegedContainer: {}
+      f:metadata:
+        f:annotations: {}
+      f:readOnlyRootFilesystem: {}
+      f:runAsUser:
+        .: {}
+        f:type: {}
+      f:seLinuxContext:
+        .: {}
+        f:type: {}
+      f:users: {}
+    manager: argocd-application-controller
+    operation: Update
+    time: "2022-06-01T16:08:38Z"
+  - apiVersion: security.openshift.io/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2023-06-07T16:50:47Z"
+  name: qualys-agent-scc
+  resourceVersion: "1357635321"
+  uid: 3f5327aa-7b3d-4bd1-8518-9b019c66a0ca
+priority: null
+readOnlyRootFilesystem: false
+requiredDropCapabilities: null
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: RunAsAny
+supplementalGroups:
+  type: RunAsAny
+users:
+- system:serviceaccount:qualys-agent:qualys-agent-sa
+volumes:
+- '*'

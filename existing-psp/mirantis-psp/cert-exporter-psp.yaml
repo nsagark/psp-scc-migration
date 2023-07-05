@@ -1,0 +1,93 @@
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    meta.helm.sh/release-name: operator
+    meta.helm.sh/release-namespace: prometheus-operator
+  creationTimestamp: "2023-04-05T09:37:34Z"
+  labels:
+    app.kubernetes.io/instance: operator
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: operator-kps
+    app.kubernetes.io/version: 45.0.0
+    chart: kube-prometheus-stack-45.0.0
+    heritage: Helm
+    release: operator
+  managedFields:
+  - apiVersion: policy/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:meta.helm.sh/release-name: {}
+          f:meta.helm.sh/release-namespace: {}
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/instance: {}
+          f:app.kubernetes.io/managed-by: {}
+          f:app.kubernetes.io/part-of: {}
+          f:app.kubernetes.io/version: {}
+          f:chart: {}
+          f:heritage: {}
+          f:release: {}
+      f:spec:
+        f:allowPrivilegeEscalation: {}
+        f:allowedHostPaths: {}
+        f:fsGroup:
+          f:ranges: {}
+          f:rule: {}
+        f:hostNetwork: {}
+        f:hostPorts: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          f:rule: {}
+        f:seLinux:
+          f:rule: {}
+        f:supplementalGroups:
+          f:ranges: {}
+          f:rule: {}
+        f:volumes: {}
+    manager: Go-http-client
+    operation: Update
+    time: "2023-06-20T05:41:53Z"
+  name: cert-exporter-psp
+  resourceVersion: "352499737"
+  uid: 56258baf-c54e-47b1-aa18-eb5aa9076559
+spec:
+  allowPrivilegeEscalation: false
+  allowedHostPaths:
+  - pathPrefix: /var/lib/docker/volumes/*certs
+    readOnly: true
+  fsGroup:
+    ranges:
+    - max: 65535
+      min: 0
+    rule: MustRunAs
+  hostNetwork: true
+  hostPorts:
+  - max: 65535
+    min: 0
+  requiredDropCapabilities:
+  - KILL
+  - MKNOD
+  - SYS_CHROOT
+  - SETUID
+  - SETGID
+  - NET_RAW
+  runAsUser:
+    rule: RunAsAny
+  seLinux:
+    rule: RunAsAny
+  supplementalGroups:
+    ranges:
+    - max: 65535
+      min: 0
+    rule: MustRunAs
+  volumes:
+  - configMap
+  - emptyDir
+  - projected
+  - secret
+  - downwardAPI
+  - hostPath
