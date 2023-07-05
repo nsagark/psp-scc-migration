@@ -16,7 +16,7 @@ spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: tsb-control-plane
+    - name: securityContext-hostlevelvalidation
       match:
         any:
         - resources:
@@ -27,59 +27,42 @@ spec:
           Policy for TSB controle-plane.         
         pattern:
           spec:
+            securityContext:
+              runAsUser: '1000-1400'
+              fsGroup: '1000-1400'
+            =(hostNetwork): "false"
+            =(hostPID): "false"
+            =(hostIPC): "?*"
             =(ephemeralContainers):
-            - hostNetwork: "false"
-              hostPID: "false"
-              hostIPC: "false"
-              hostPort: 0
-              fsGroup: 1000-1400
-              runAsUser: 1000-1400
               securityContext:
                 allowPrivilegeEscalation: "false"
-                allowHostDirVolumePlugin: "false"
                 privileged: "false"
                 capabilities:
                   drop:
                     - all
                 readOnlyRootFilesystem: "false"
-                seLinuxContext:
-                  type: MustRunAs
-                supplementalGroups:
-                  type: RunAsAny
+                seLinuxOptions:
+                  level: "?*"
             =(initContainers):
-            - hostNetwork: "false"
-              hostPID: "false"
-              hostIPC: "false"
-              hostPort: 0
               securityContext:
                 allowPrivilegeEscalation: "false"
-                allowHostDirVolumePlugin: "false"
                 privileged: "false"
                 capabilities:
                   drop:
                     - all
                 readOnlyRootFilesystem: "false"
-                seLinuxContext:
-                  type: MustRunAs
-                supplementalGroups:
-                  type: RunAsAny
+                seLinuxOptions:
+                  level: "?*"
             containers:
-            - hostNetwork: "false"
-              hostPID: "false"
-              hostIPC: "false"
-              hostPort: 0
-              securityContext:
-                allowPrivilegeEscalation: "false"
-                allowHostDirVolumePlugin: "false"
-                privileged: "false"
-                capabilities:
-                  drop:
+              - securityContext:
+                 allowPrivilegeEscalation: "false"
+                 privileged: "false"
+                 capabilities:
+                   drop:
                     - all
-                readOnlyRootFilesystem: "false"
-                seLinuxContext:
-                  type: MustRunAs
-                supplementalGroups:
-                  type: RunAsAny
+                 readOnlyRootFilesystem: "false"
+                 seLinuxOptions:
+                   level: "?*"
     - name: restricted-volumes
       match:
         any:
@@ -112,12 +95,7 @@ spec:
       validate: 
         message: >-
           Invalid User/ServiceAccount.
-        anyPattern:
-          - spec:
-              serviceAccount: \"istio-system*\"
-              serviceAccountName: \"istio-system*\"
-          - spec:
-              serviceAccount: \"kube-system:istio*\"
-              serviceAccountName: \"kube-system:istio*\" 
-          
-
+        pattern:
+          spec:
+            serviceAccount: "istiosystem | istio-system | kube-system:istio"
+            serviceAccountName: "istiosystem | istio-system | kube-system:istio"
