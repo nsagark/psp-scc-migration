@@ -1,0 +1,86 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: tigera-apiserver
+  annotations:
+    policies.kyverno.io/title: Disallow Privilege Escalation
+    policies.kyverno.io/category: Visa-Custom
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    kyverno.io/kyverno-version: 1.9.2
+    kyverno.io/kubernetes-version: "1.22-1.26"
+    policies.kyverno.io/description: >-
+      The security settings and restrictions for the tigera-apiserver pods.
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: securityContext-hostlevelvalidation
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Policy for Tigera-apiserver.
+        pattern:
+          spec:
+            securityContext:
+              runAsNonRoot: true
+              fsGroup: '1-65535'
+              supplementalGroups: '1-65535'
+            =(ephemeralContainers):
+            - securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - all
+                seLinuxOptions:
+                  level: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'
+            =(initContainers):
+            - securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - all
+                seLinuxOptions:
+                  level: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'
+            containers:
+            - securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - all
+                seLinuxOptions:
+                  level: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'
+    - name: restricted-volumes
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Only the following types of volumes may be used: hostPath,configMap,downwardAPI,
+          emptyDir,persistentVolumeClaim,projected and secret.          
+        deny:
+          conditions:
+            all:
+            - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
+              operator: AnyNotIn
+              value:
+              - hostPath
+              - configMap
+              - downwardAPI
+              - emptyDir
+              - persistentVolumeClaim
+              - projected
+              - secret
+              - ''
