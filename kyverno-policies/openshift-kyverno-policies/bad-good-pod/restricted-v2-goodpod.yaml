@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: scc-kyverno-restrcitedv2-badpod
+  name: scc-kyverno-restrcitedv2-goodpod
 spec:
   hostNetwork: false
   hostPID: false
