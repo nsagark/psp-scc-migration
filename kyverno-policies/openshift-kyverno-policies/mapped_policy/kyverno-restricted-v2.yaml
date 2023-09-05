@@ -24,7 +24,6 @@ spec:
             =(hostNetwork): false
             =(hostIPC): false
             =(hostPID): false 
-            securityContext:
             =(ephemeralContainers):
                 securityContext:
                   allowPrivilegeEscalation: "false"
