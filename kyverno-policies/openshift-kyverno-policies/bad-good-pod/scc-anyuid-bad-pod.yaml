@@ -1,16 +1,15 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: visa-restricted
+  name: anyuid
   annotations:
     policies.kyverno.io/description: >-
-      Visa Restricted Policy - Disallow privilege escalation, such as via set-user-ID or set-group-ID file mode, should not be allowed.
-      This policy ensures the `allowPrivilegeEscalation` field is set to `false`.      
+      anyuid Policy - Allow privilege escalation.      
 spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: securitycontext-hostlevelvalidation
+    - name: scc-anyuid-bad-pod
       match:
         any:
         - resources:
@@ -18,43 +17,44 @@ spec:
               - Pod
       validate:
         message: >-
-          This is Visa Restricted policy  - restricting access at host level, disallow privilege escalation and restricting volume types.        
+          This is anyuid policy  - restricting access at host level, allow privilege escalation and restricting volume types.        
         pattern:
           spec:
             =(hostNetwork): false
             =(hostIPC): false
             =(hostPID): false 
+            securityContext:
             =(ephemeralContainers):
                 securityContext:
-                  allowPrivilegeEscalation: "false"
+                  allowPrivilegeEscalation: true
                   privileged: false
                   runAsNonRoot: "true"
                   capabilities:
                     drop:
                       - all
-                  readOnlyRootFilesystem: "true"
+                  readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             =(initContainers):
                 securityContext:
-                  allowPrivilegeEscalation: "false"
+                  allowPrivilegeEscalation: true
                   privileged: false
                   runAsNonRoot: "true"
                   capabilities:
                     drop:
                       - all
-                  readOnlyRootFilesystem: "true"
+                  readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             containers:
             - securityContext:
-                allowPrivilegeEscalation: "false"
+                allowPrivilegeEscalation: true
                 privileged: false
                 runAsNonRoot: "true"
                 capabilities:
                   drop:
                     - all
-                readOnlyRootFilesystem: "true"
+                readOnlyRootFilesystem: false
                 seLinuxOptions:
                   level: "?*"
     - name: restricted-volumes
@@ -85,6 +85,8 @@ spec:
               - persistentVolumeClaim
               - projected
               - secret
+              - csi
+              - ephemeral
               - ''
     - name: host-ports-none
       match:
