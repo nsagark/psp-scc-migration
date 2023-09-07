@@ -10,7 +10,7 @@ metadata:
     kyverno.io/kyverno-version: 1.9.2
     kyverno.io/kubernetes-version: "1.23-1.26"
     policies.kyverno.io/description: >-
-      Visa pulse Policy - privileged      
+      Visa pulse Policy      
 spec:
   validationFailureAction: Enforce
   background: true
@@ -34,69 +34,79 @@ spec:
               securityContext:
                 allowPrivilegeEscalation: true
                 privileged: true
-                capabilities:
-                  drop:
-                    - MKNOD
-                  add:
-                    - SETPCAP
-                    - AUDIT_WRITE
-                    - CHOWN
-                    - NET_RAW
-                    - DAC_OVERRIDE
-                    - FOWNER
-                    - FSETID
-                    - KILL
-                    - SETUID
-                    - SETGID
-                    - NET_BIND_SERVICE
-                    - SYS_CHROOT
-                    - SETFCAP
                 seLinuxOptions:
                   level: "?*"
             =(initContainers):          
               securityContext:
                 allowPrivilegeEscalation: true
                 privileged: true
-                capabilities:
-                  drop:
-                    - MKNOD
-                  add:
-                    - SETPCAP
-                    - AUDIT_WRITE
-                    - CHOWN
-                    - NET_RAW
-                    - DAC_OVERRIDE
-                    - FOWNER
-                    - FSETID
-                    - KILL
-                    - SETUID
-                    - SETGID
-                    - NET_BIND_SERVICE
-                    - SYS_CHROOT
-                    - SETFCAP
                 seLinuxOptions:
                   level: "?*"
             containers:          
             - securityContext:
                 allowPrivilegeEscalation: true
                 privileged: true
-                capabilities:
-                  drop:
-                    - MKNOD
-                  add:
-                    - SETPCAP
-                    - AUDIT_WRITE
-                    - CHOWN
-                    - NET_RAW
-                    - DAC_OVERRIDE
-                    - FOWNER
-                    - FSETID
-                    - KILL
-                    - SETUID
-                    - SETGID
-                    - NET_BIND_SERVICE
-                    - SYS_CHROOT
-                    - SETFCAP
                 seLinuxOptions:
                   level: "?*"          
+    - name: required-drop-capabilities
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      preconditions:
+        all:
+        - key: "{{ request.operation || 'BACKGROUND' }}"
+          operator: NotEquals
+          value: DELETE
+      validate:
+        message: >-
+                    Any container needs to have SETPCAP,AUDIT_WRITE,CHOWN,NET_RAW,DAC_OVERRIDE,FOWNER,FSETID,KILL,SETUID,SETGID,NET_BIND_SERVICE,SYS_CHROOT,SETFCAP capabilities.
+        foreach:
+          - list: request.object.spec.[ephemeralContainers, initContainers, containers][]
+            deny:
+              conditions:
+                any:
+                - key: SETPCAP
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: AUDIT_WRITE
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: CHOWN
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: NET_RAW
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: DAC_OVERRIDE
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: FOWNER
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: FSETID
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: KILL
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: SETUID
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: SETGID
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: NET_BIND_SERVICE
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: SYS_CHROOT
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: SETFCAP
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+                - key: MKNOD
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
     
