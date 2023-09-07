@@ -10,7 +10,7 @@ metadata:
     kyverno.io/kyverno-version: 1.9.2
     kyverno.io/kubernetes-version: "1.23-1.26"
     policies.kyverno.io/description: >-
-      Custom Policy for cert exportor at Visa
+      Custom Policy for cert exporter at Visa
 spec:
   validationFailureAction: Enforce
   background: true
@@ -73,6 +73,7 @@ spec:
             - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
               operator: AnyNotIn
               value:
+              - name
               - configMap
               - downwardAPI
               - emptyDir
