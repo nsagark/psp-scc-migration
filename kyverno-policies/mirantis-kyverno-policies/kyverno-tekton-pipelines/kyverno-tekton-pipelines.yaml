@@ -1,0 +1,71 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: kyverno-tekton-pipelines
+  annotations:
+    policies.kyverno.io/title: tekton-pipelines
+    policies.kyverno.io/category: Visa-Custom
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    kyverno.io/kyverno-version: 1.9.2
+    kyverno.io/kubernetes-version: "1.23-1.26"
+    policies.kyverno.io/description: >-
+      Custom Policy for tekton-pipelines access at Visa
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: securityContext-hostlevelvalidation
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Policy for tekton-pipelines Access.        
+        pattern:
+          spec:            
+            securityContext:
+              runAsNonRoot: true
+              fsGroup: '1-65535'
+              supplementalGroups: '1-65535'  
+            =(ephemeralContainers):          
+              securityContext:
+                allowPrivilegeEscalation: false
+                seLinuxOptions:
+                  level: "?*"
+            =(initContainers):          
+              securityContext:
+                allowPrivilegeEscalation: false
+                seLinuxOptions:
+                  level: "?*"
+            containers:          
+            - securityContext:
+                allowPrivilegeEscalation: false
+                seLinuxOptions:
+                  level: "?*"            
+    - name: tekton-pipelines-volumes
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Only the following types of volumes may be used: configMap, downwardAPI,
+          emptyDir, persistentVolumeClaim and secret.          
+        deny:
+          conditions:
+            all:
+            - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
+              operator: AnyNotIn
+              value:
+              - name
+              - configMap
+              - downwardAPI
+              - emptyDir
+              - persistentVolumeClaim
+              - secret
+              - ''
+   
