@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: scc-kyverno-nonroot-anyuid-badpod
+spec:
+  hostNetwork: false
+  hostPID: false
+  hostIPC: false
+  securityContext:
+    runAsNonRoot: false
+  volumes:
+  - hostPath:
+      path: /dev/null
+      type: DirectoryOrCreate
+  containers:
+  - name: container01
+    image: busybox
+    command:
+      - sleep
+      - "3600"
+    ports:
+    - hostPort: 80
+    securityContext:
+      runAsNonRoot: false
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+          - KILL
+          - MKNOD
+          - SETUID
+      seLinuxOptions:
+        level: "s0:c123,c456"
