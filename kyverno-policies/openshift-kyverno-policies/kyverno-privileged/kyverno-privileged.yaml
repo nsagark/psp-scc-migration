@@ -1,0 +1,139 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name:  kyverno-privileged
+  annotations:
+    policies.kyverno.io/title:  privileged
+    policies.kyverno.io/category: Visa-Custom
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    kyverno.io/kyverno-version: 1.9.2
+    kyverno.io/kubernetes-version: "1.23-1.26"
+    policies.kyverno.io/description: >-
+      Custom Policy for privileged deplyment at Visa     
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: securityContext-hostlevelvalidation
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Policy for privileged.         
+        pattern:
+          spec:
+            hostNetwork: true
+            =(hostIPC): true
+            =(hostPID): true
+            securityContext:
+              runAsUser: "?*"
+              fsGroup: "?*"
+              supplementalGroups: "?*"    
+            =(ephemeralContainers):
+            - securityContext:
+                allowPrivilegeEscalation: true
+                readOnlyRootFilesystem: false
+                privileged: true
+                seLinuxOptions:
+                  level: "?*"
+            =(initContainers):
+            - securityContext:
+                allowPrivilegeEscalation: true
+                readOnlyRootFilesystem: false
+                privileged: true
+                seLinuxOptions:
+                  level: "?*"
+            containers:
+            - securityContext:
+                allowPrivilegeEscalation: true
+                readOnlyRootFilesystem: false
+                privileged: true
+                seLinuxOptions:
+                  level: "?*"
+    - name: host-ports
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Use of host ports. The fields spec.containers[*].ports[*].hostPort
+          , spec.initContainers[*].ports[*].hostPort, and spec.ephemeralContainers[*].ports[*].hostPort
+          must either be unset or set between `0-65535`.          
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - =(ports):
+                  - =(hostPort): "0-65535"
+            =(initContainers):
+              - =(ports):
+                  - =(hostPort): "0-65535"
+            containers:
+              - =(ports):
+                  - =(hostPort): "0-65535"
+    - name: allow-system-cluster-admin-group-binding
+      match:
+        any:
+        - resources:
+            kinds:
+              - RoleBinding
+              - ClusterRoleBinding
+      validate:
+        message: "Only Binding to system:cluster-admins is allowed."
+        pattern:
+          roleRef:
+            name: "system:cluster-admins"
+    - name: allow-system-nodes-group-binding
+      match:
+        any:
+        - resources:
+            kinds:
+              - RoleBinding
+              - ClusterRoleBinding
+      validate:
+        message: "Only Binding to system:nodes is allowed."
+        pattern:
+          roleRef:
+            name: "system:nodes"
+    - name: allow-system-masters-group-binding
+      match:
+        any:
+        - resources:
+            kinds:
+              - RoleBinding
+              - ClusterRoleBinding
+      validate:
+        message: "Only Binding to system:masters is allowed."
+        pattern:
+          roleRef:
+            name: "system:masters"
+    - name: allow-system-admin-user-binding
+      match:
+        any:
+        - resources:
+            kinds:
+              - RoleBinding
+              - ClusterRoleBinding
+      validate:
+        message: "Only Binding to system:admin is allowed."
+        pattern:
+          roleRef:
+            name: "system:admin"
+    - name: restrict-users
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate: 
+        message: >-
+          Invalid User/ServiceAccount.
+        pattern:
+          spec:
+            serviceAccount: "openshift-infra:build-controller"
+            #serviceAccountName: "openshift-infra:build-controller"
