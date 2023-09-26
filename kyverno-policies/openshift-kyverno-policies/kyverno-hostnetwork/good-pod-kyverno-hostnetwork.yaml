@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: good-pod-hostnetwork
+spec:
+  hostNetwork: true
+  hostPID: false
+  hostIPC: false
+  securityContext:
+    runAsUser: 1000
+    fsGroup: 1001
+    supplementalGroups: [2002]
+  volumes:
+    - name: config-volume
+      configMap:
+        name: my-config-map
+  containers:
+  - name: container01
+    image: busybox
+    command:
+      - sleep
+      - "3600"
+    ports:
+    - hostPort: 65515
+    volumeMounts:
+    - name: config-volume
+      mountPath: /etc/config
+    securityContext:
+      allowPrivilegeEscalation: true
+      readOnlyRootFilesystem: false
+      privileged: false
+      capabilities:
+        drop:
+          - KILL
+          - MKNOD
+          - SETUID
+          - SETGID
+      seLinuxOptions:
+        level: "s0:c123,c456"
