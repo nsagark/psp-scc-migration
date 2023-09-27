@@ -1,7 +1,7 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: unprivileged
+  name: visa-unprivileged
   annotations:
     policies.kyverno.io/title: unprivileged
     policies.kyverno.io/category: Visa-Custom

@@ -1,7 +1,7 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: kyverno-tekton-pipelines
+  name: visa-kyverno-tekton-pipelines
   annotations:
     policies.kyverno.io/title: tekton-pipelines
     policies.kyverno.io/category: Visa-Custom

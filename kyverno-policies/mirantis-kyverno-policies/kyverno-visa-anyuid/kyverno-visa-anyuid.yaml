@@ -1,7 +1,7 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: anyuid-policy
+  name: visa-anyuid
   annotations:
     policies.kyverno.io/title: restricted with anyuid
     policies.kyverno.io/category: Visa-Custom 

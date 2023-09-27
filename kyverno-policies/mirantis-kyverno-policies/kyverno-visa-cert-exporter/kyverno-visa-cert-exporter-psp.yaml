@@ -1,7 +1,7 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: cert-exporter-policy
+  name: visa-cert-exporter-policy
   annotations:
     policies.kyverno.io/title: cert exporter policy
     policies.kyverno.io/category: Visa-Custom

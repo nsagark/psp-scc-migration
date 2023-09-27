@@ -1,7 +1,7 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: restricted-rw-access
+  name: visa-restricted-rw-access
   annotations:
     policies.kyverno.io/title: Restrict rw access
     policies.kyverno.io/category: Visa-Custom
