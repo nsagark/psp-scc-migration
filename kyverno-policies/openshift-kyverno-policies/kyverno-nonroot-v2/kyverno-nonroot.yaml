@@ -12,7 +12,7 @@ spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: scc-nonroot-v2-bad-pod
+    - name: securitycontext-hostlevelvalidation
       match:
         any:
         - resources:

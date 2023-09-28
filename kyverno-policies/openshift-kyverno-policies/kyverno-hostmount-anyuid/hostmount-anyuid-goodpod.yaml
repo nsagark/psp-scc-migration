@@ -1,17 +1,16 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: scc-kyverno-hostmount-anyuid-goodpod
+  name: hostmount-anyuid-goodpod
 spec:
   hostNetwork: false
   hostPID: false
   hostIPC: false
-  serviceAccount: openshift-infra:pv-recycler-controller
   securityContext:
     runAsUser: 1001
     runAsGroup: 3001
     fsGroup: 2001
-    supplementalGroups: 4001
+    supplementalGroups: [4001]
     runAsNonRoot: true
   volumes:
   - name: config-vol

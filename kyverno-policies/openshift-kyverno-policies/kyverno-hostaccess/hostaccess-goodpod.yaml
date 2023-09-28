@@ -1,19 +1,19 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: scc-kyverno-hostaccess-goodpod
+  name:  hostaccess-goodpod
 spec:
   hostNetwork: false
   hostPID: false
   hostIPC: false
   securityContext:
+    supplementalGroups: [4001]
     runAsUser: 1001
-    runAsGroup: 3001
     fsGroup: 2001
-    supplementalGroups: 4001
     runAsNonRoot: true
   volumes:
-  - hostPath:
+  - name: config-vol
+    hostPath:
       path: /dev/null
       type: DirectoryOrCreate
   containers:
