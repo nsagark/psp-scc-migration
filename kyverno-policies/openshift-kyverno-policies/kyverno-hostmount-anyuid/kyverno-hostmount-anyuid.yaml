@@ -1,16 +1,18 @@
+# Need to add allowHostDirVolumePlugin, allowPrivilegedContainer
+
+
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: restricted
+  name: hostmount-anyuid
   annotations:
     policies.kyverno.io/description: >-
-       Restricted Policy - Disallow privilege escalation, such as via set-user-ID or set-group-ID file mode, should not be allowed.
-      This policy ensures the `allowPrivilegeEscalation` field is set to `false`.      
+      hostmount-anyuid Policy - Allow hostmount-anyuid privilege.      
 spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: securitycontext-hostlevelvalidation
+    - name: scc-hostmount-anyuid-bad-pod
       match:
         any:
         - resources:
@@ -18,32 +20,32 @@ spec:
               - Pod
       validate:
         message: >-
-          This is  Restricted policy  - restricting access at host level, disallow privilege escalation and restricting volume types.        
+          This is hostaccess policy  - provide access at host level.
         pattern:
           spec:
             securityContext:
-              runAsUser: "1000-65535"
-              fsGroup: "1000-65535"
+              runAsUser: "?*"
+              fsGroup: "?*"
               supplementalGroups: "?*"
             =(hostNetwork): false
             =(hostIPC): false
             =(hostPID): false 
             =(ephemeralContainers):
                 securityContext:
-                  allowPrivilegeEscalation: "false"
-                  readOnlyRootFilesystem: "true"
+                  allowPrivilegeEscalation: true
+                  readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             =(initContainers):
                 securityContext:
-                  allowPrivilegeEscalation: "false"
-                  readOnlyRootFilesystem: "true"
+                  allowPrivilegeEscalation: true
+                  readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             containers:
             - securityContext:
-                allowPrivilegeEscalation: "false"
-                readOnlyRootFilesystem: "true"
+                allowPrivilegeEscalation: true
+                readOnlyRootFilesystem: false
                 seLinuxOptions:
                   level: "?*"
     - name: restricted-volumes
@@ -71,6 +73,8 @@ spec:
               - configMap
               - downwardAPI
               - emptyDir
+              - hostPath
+              - nfs
               - persistentVolumeClaim
               - projected
               - secret
@@ -110,33 +114,14 @@ spec:
           value: DELETE
       validate:
         message: >-
-                    Any container needs to have KILL, MKNOD, SETUID, SETGID capabilities.
+                    Any container needs to have MKNOD capabilities.
         foreach:
           - list: request.object.spec.[ephemeralContainers, initContainers, containers][]
             deny:
               conditions:
                 any:
-                - key: KILL
-                  operator: AnyNotIn
-                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
                 - key: MKNOD
                   operator: AnyNotIn
                   value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
-                - key: SETUID
-                  operator: AnyNotIn
-                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
-                - key: SETGID
-                  operator: AnyNotIn
-                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
-    - name: allo-system-authenticate-group-binding
-      match:
-        any:
-        - resources:
-            kinds:
-              - RoleBinding
-              - ClusterRoleBinding
-      validate:
-        message: "Only Binding to system:authenticated is allowed."
-        pattern:
-          roleRef:
-            name: "system:authenticated"
+
+

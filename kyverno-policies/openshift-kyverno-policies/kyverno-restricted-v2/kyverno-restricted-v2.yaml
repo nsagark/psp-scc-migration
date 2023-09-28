@@ -41,8 +41,8 @@ spec:
                 securityContext:
                   allowPrivilegeEscalation: "false"
                   capabilities:
-                  drop:
-                    - all
+                    drop:
+                      - all
                   readOnlyRootFilesystem: "false"
                   seLinuxOptions:
                     level: "?*"
@@ -50,8 +50,8 @@ spec:
             - securityContext:
                 allowPrivilegeEscalation: "false"
                 capabilities:
-                drop:
-                  - all
+                  drop:
+                    - all
                 readOnlyRootFilesystem: "false"
                 seLinuxOptions:
                   level: "?*"

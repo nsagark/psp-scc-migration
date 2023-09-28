@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: scc-kyverno-nonroot-goodpod
+  name: nonroot-v2-goodpod
 spec:
   hostNetwork: false
   hostPID: false
@@ -10,14 +10,11 @@ spec:
     runAsUser: 1001
     runAsGroup: 3001
     fsGroup: 2001
-    supplementalGroups: 4001
+    supplementalGroups: [4001]
     runAsNonRoot: true
-    seccompProfile:
-      type: RuntimeDefault
   volumes:
-  - hostPath:
-      path: /dev/null
-      type: DirectoryOrCreate
+  - name: config-vol
+    emptyDir: {}
   containers:
   - name: container01
     image: busybox
@@ -28,12 +25,10 @@ spec:
     - name: config-vol
       mountPath: /etc/config
     securityContext:
-      seccompProfile:
-        type: RuntimeDefault
       runAsNonRoot: true
       allowPrivilegeEscalation: true
       readOnlyRootFilesystem: false
-      privileged: false
+      privileged: true
       capabilities:
         drop:
           - all
@@ -41,3 +36,4 @@ spec:
           - NET_BIND_SERVICE
       seLinuxOptions:
         level: "s0:c123,c456"
+
