@@ -23,6 +23,7 @@ spec:
       - "3600"
     ports:
     - hostPort: 65535
+      containerPort: 65535
     volumeMounts:
     - name: config-vol
       mountPath: /var/lib/docker/volumes/*certs
