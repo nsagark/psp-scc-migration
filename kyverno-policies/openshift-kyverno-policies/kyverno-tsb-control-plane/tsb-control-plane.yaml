@@ -79,6 +79,7 @@ spec:
             - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
               operator: AnyNotIn
               value:
+              - name
               - configMap
               - downwardAPI
               - emptyDir
@@ -86,16 +87,16 @@ spec:
               - projected
               - secret
               - ''
-    - name: restrict-users
-      match:
-        any:
-        - resources:
-            kinds:
-              - Pod
-      validate: 
-        message: >-
-          Invalid User/ServiceAccount.
-        pattern:
-          spec:
-            serviceAccount: "istiosystem | istio-system | kube-system:istio"
-            serviceAccountName: "istiosystem | istio-system | kube-system:istio"
+#    - name: restrict-users
+#      match:
+#        any:
+#        - resources:
+#            kinds:
+#              - Pod
+#      validate: 
+#        message: >-
+#          Invalid User/ServiceAccount.
+#        pattern:
+#          spec:
+#            serviceAccount: "istiosystem | istio-system | kube-system:istio"
+#            serviceAccountName: "istiosystem | istio-system | kube-system:istio"
