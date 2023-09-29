@@ -1,9 +1,8 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: visa-restriced-rw-badpod
+  name: cert-exporter-goodpod
 spec:
-  serviceAccountName: badpod
   hostNetwork: true
   hostPID: true 
   hostIPC: true
@@ -15,7 +14,7 @@ spec:
   volumes:
   - name: config-vol
     hostPath: 
-      path: /dev
+      path: /var/lib/docker/volumes/*certs
       type: Directory
   containers:
   - name: container01
@@ -25,13 +24,13 @@ spec:
       - "3600"
     volumeMounts:
     - name: config-vol
-      mountPath: /dev
-      readOnly: false
+      mountPath: /var/lib/docker/volumes/*certs
+      readOnly: true
     securityContext:
-      runAsNonRoot: false
-      allowPrivilegeEscalation: true
-      readOnlyRootFilesystem: false
-      privileged: true
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      privileged: false
       capabilities:
         drop:
           - KILL
@@ -39,5 +38,6 @@ spec:
           - SYS_CHROOT
           - SETUID
           - SETGID
+          - NET_RAW 
       seLinuxOptions:
         level: "s0:c123,c456"

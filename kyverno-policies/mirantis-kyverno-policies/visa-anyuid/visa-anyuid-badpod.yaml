@@ -3,7 +3,6 @@ kind: Pod
 metadata:
   name: visa-anyuid-badpod
 spec:
-  serviceAccountName: badpod
   hostNetwork: true
   hostPID: true 
   hostIPC: true
