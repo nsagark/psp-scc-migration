@@ -21,7 +21,8 @@ spec:
       - sleep
       - "3600"
     ports:
-    - hostPort: 65555
+    - hostPort: 800
+      containerPort: 800
     volumeMounts:
     - name: config-volume
       mountPath: /etc/config
@@ -29,8 +30,5 @@ spec:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
       privileged: false
-      capabilities:
-        drop:
-          - all
       seLinuxOptions:
         level: "s0:c123,c456"

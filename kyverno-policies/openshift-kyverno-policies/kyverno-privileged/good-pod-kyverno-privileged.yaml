@@ -1,9 +1,19 @@
+---
+apiVersion: v1
+data:
+  name: hello
+kind: ConfigMap
+metadata:
+  name: my-config-map
+  namespace: openshift-infra
+---
 apiVersion: v1
 kind: Pod
 metadata:
   name: good-pod-privileged
+  namespace: openshift-infra
 spec:
-  serviceAccount: openshift-infra:build-controller
+  serviceAccount: build-controller
   hostNetwork: true
   hostPID: true
   hostIPC: true
@@ -23,6 +33,7 @@ spec:
       - "3600"
     ports:
     - hostPort: 65522
+      containerPort: 65522
     volumeMounts:
     - name: config-volume
       mountPath: /etc/config
@@ -30,8 +41,5 @@ spec:
       allowPrivilegeEscalation: true
       readOnlyRootFilesystem: false
       privileged: true
-      capabilities:
-        drop:
-          - all
       seLinuxOptions:
         level: "s0:c123,c456"
