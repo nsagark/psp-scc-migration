@@ -9,11 +9,12 @@ metadata:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: good-pod-node-exporter
+  name: good-pod-tsb-control-plane
 spec:
-  hostNetwork: true
-  hostPID: true
-  hostIPC: true
+  #serviceAccount: istio-system
+  hostNetwork: false
+  hostPID: false
+  hostIPC: false
   securityContext:
     runAsUser: 1000
     fsGroup: 1001
@@ -29,15 +30,15 @@ spec:
       - sleep
       - "3600"
     ports:
-    - hostPort: 9090
-      containerPort: 9090
+    - hostPort: 900
+      containerPort: 900
     volumeMounts:
     - name: config-volume
       mountPath: /etc/config
     securityContext:
-      allowPrivilegeEscalation: true
+      allowPrivilegeEscalation: false
       readOnlyRootFilesystem: false
-      privileged: true
+      privileged: false
       capabilities:
         drop:
           - all

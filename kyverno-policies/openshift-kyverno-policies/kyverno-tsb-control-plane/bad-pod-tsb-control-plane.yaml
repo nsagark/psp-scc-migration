@@ -9,19 +9,20 @@ metadata:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: good-pod-node-exporter
+  name: bad-pod-tsb-control-plane
 spec:
   hostNetwork: true
   hostPID: true
   hostIPC: true
   securityContext:
-    runAsUser: 1000
-    fsGroup: 1001
+    runAsUser: 1500
+    fsGroup: 1500
     supplementalGroups: [2002]
   volumes:
-    - name: config-volume
-      configMap:
-        name: my-config-map
+    - name: host-volume
+      hostPath:
+        path: /var/mydata 
+        type: Directory
   containers:
   - name: container01
     image: busybox
@@ -32,12 +33,12 @@ spec:
     - hostPort: 9090
       containerPort: 9090
     volumeMounts:
-    - name: config-volume
-      mountPath: /etc/config
+    - name: host-volume
+      mountPath: /tmp
     securityContext:
-      allowPrivilegeEscalation: true
-      readOnlyRootFilesystem: false
-      privileged: true
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      privileged: false
       capabilities:
         drop:
           - all

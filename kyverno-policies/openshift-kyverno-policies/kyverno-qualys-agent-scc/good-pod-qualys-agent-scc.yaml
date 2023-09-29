@@ -1,9 +1,17 @@
+---
+apiVersion: v1
+data:
+  name: hello
+kind: ConfigMap
+metadata:
+  name: my-config-map
+---
 apiVersion: v1
 kind: Pod
 metadata:
   name: good-pod-qualys-agent-scc
 spec:
-  serviceAccount: qualys-agent:qualys-agent-sa
+  #serviceAccount: qualys-agent-sa
   hostNetwork: true
   hostPID: true
   hostIPC: true
@@ -22,7 +30,8 @@ spec:
       - sleep
       - "3600"
     ports:
-    - hostPort: 65522
+    - hostPort: 900
+      containerPort: 900
     volumeMounts:
     - name: config-volume
       mountPath: /etc/config
