@@ -76,16 +76,16 @@ spec:
             containers:
               - =(ports):
                   - =(hostPort): "0-65535"
-    - name: restrict-users
-      match:
-        any:
-        - resources:
-            kinds:
-              - Pod
-      validate: 
-        message: >-
-          Invalid User/ServiceAccount.
-        pattern:
-          spec:
-            serviceAccount: "qualys-agent:qualys-agent-sa"
-            #serviceAccountName: "qualys-agent:qualys-agent-sa"
+   # - name: restrict-users
+   #   match:
+   #     any:
+   #     - resources:
+   #         kinds:
+   #           - Pod
+   #   validate: 
+   #     message: >-
+   #       Invalid User/ServiceAccount.
+   #     pattern:
+   #       spec:
+   #         serviceAccount: "qualys-agent:qualys-agent-sa"
+   #         #serviceAccountName: "qualys-agent:qualys-agent-sa"
