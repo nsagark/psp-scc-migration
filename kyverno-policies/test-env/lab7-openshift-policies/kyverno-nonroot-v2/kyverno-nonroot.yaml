@@ -1,0 +1,223 @@
+# Need to add allowHostDirVolumePlugin, allowPrivilegedContainer
+# check unAsUser value
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: nonroot-v2
+  annotations:
+    policies.kyverno.io/description: >-
+      nonroot-v2 Policy - Allow nonroot-v2 privilege.      
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: securitycontext-hostlevelvalidation
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-apiserver-operator
+            names:
+              - openshift-apiserver-operator-8588845c96-9l9zj
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-cluster-storage-operator
+            names:
+              - cluster-storage-operator-98db775d6-5f4bj
+              - csi-snapshot-controller-operator-6fbfbb5775-dsbrg
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-config-operator
+            names:
+              - openshift-config-operator-869f85bc9c-mdgcj
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-controller-manager-operator
+            names:
+              - openshift-controller-manager-operator-998d7877-hwqhg
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-kube-storage-version-migrator-operator
+            names:
+              - kube-storage-version-migrator-operator-667bfc4fd-tnmvn
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-kube-storage-version-migrator
+            names:
+              - migrator-5dbc4647f8-hmzfd
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-operator-lifecycle-manager
+            names:
+              - catalog-operator-bd76794d9-l7hfx
+              - olm-operator-7bbd98975d-62flk
+              - package-server-manager-5c6967cb66-j5l8x
+              - packageserver-678786b4f8-ld5cd
+              - packageserver-678786b4f8-sc9fv
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-service-ca-operator
+            names:
+              - service-ca-operator-67584cffb6-zctvw
+      validate:
+        message: >-
+          This is nonroot-v2 policy  - provide access at host level.
+        pattern:
+          spec:
+            securityContext:
+              fsGroup: "?*"
+              supplementalGroups: "?*"
+            =(hostNetwork): false
+            =(hostIPC): false
+            =(hostPID): false 
+            =(ephemeralContainers):
+                securityContext:
+                  allowPrivilegeEscalation: true
+                  runAsNonRoot: "true"
+                  readOnlyRootFilesystem: false
+                  capabilities:
+                    drop:
+                      - all
+                  seLinuxOptions:
+                    level: "?*"
+            =(initContainers):
+                securityContext:
+                  allowPrivilegeEscalation: true
+                  runAsNonRoot: "true"
+                  readOnlyRootFilesystem: false
+                  capabilities:
+                    drop:
+                      - all
+                  seLinuxOptions:
+                    level: "?*"
+            containers:
+            - securityContext:
+                allowPrivilegeEscalation: true
+                runAsNonRoot: "true"
+                readOnlyRootFilesystem: false
+                capabilities:
+                  drop:
+                    - all
+                seLinuxOptions:
+                  level: "?*"
+    - name: restricted-volumes
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      preconditions:
+        all:
+        - key: "{{ request.operation || 'BACKGROUND' }}"
+          operator: NotEquals
+          value: DELETE
+      validate:
+        message: >-
+          Only the following types of volumes may be used: configMap, downwardAPI,
+          emptyDir, persistentVolumeClaim, projected, and secret.
+        deny:
+          conditions:
+            all:
+            - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
+              operator: AnyNotIn
+              value:
+              - name
+              - configMap
+              - downwardAPI
+              - emptyDir
+              - persistentVolumeClaim
+              - projected
+              - secret
+              - ''
+    - name: host-ports-none
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort
+          , spec.initContainers[*].ports[*].hostPort, and spec.ephemeralContainers[*].ports[*].hostPort
+          must either be unset or set to `0`.          
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - =(ports):
+                  - =(hostPort): 0
+            =(initContainers):
+              - =(ports):
+                  - =(hostPort): 0
+            containers:
+              - =(ports):
+                  - =(hostPort): 0
+    - name: required-add-capabilities
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      preconditions:
+        all:
+        - key: "{{ request.operation || 'BACKGROUND' }}"
+          operator: NotEquals
+          value: DELETE
+      validate:
+        message: >-
+                    Any container needs to have NET_BIND_SERVICE capabilities.
+        foreach:
+          - list: request.object.spec.[ephemeralContainers, initContainers, containers][]
+            deny:
+              conditions:
+                any:
+                - key: NET_BIND_SERVICE
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+    - name: check-seccomp
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Use of custom Seccomp profiles is disallowed. The fields
+          spec.securityContext.seccompProfile.type,
+          spec.containers[*].securityContext.seccompProfile.type,
+          spec.initContainers[*].securityContext.seccompProfile.type, and
+          spec.ephemeralContainers[*].securityContext.seccompProfile.type
+          must be unset or set to `RuntimeDefault`.          
+        pattern:
+          spec:
+            =(securityContext):
+              =(seccompProfile):
+                =(type): "RuntimeDefault"      
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(seccompProfile):
+                  =(type): "RuntimeDefault"
+            =(initContainers):
+            - =(securityContext):
+                =(seccompProfile):
+                  =(type): "RuntimeDefault"
+            containers:
+            - =(securityContext):
+                =(seccompProfile):
+                  =(type): "RuntimeDefault"

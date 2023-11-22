@@ -1,35 +1,30 @@
 # Need to add allowHostDirVolumePlugin, allowPrivilegedContainer
-
+# check unAsUser value
 
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: hostaccess
+  name: nonroot-anyuid
   annotations:
     policies.kyverno.io/description: >-
-      hostaccess Policy - Allow hostaccess privilege.      
+      nonroot-anyuid Policy - Allow nonroot-anyuid privilege.      
 spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: scc-hostaccess-bad-pod
+    - name: scc-nonroot-anyuid-bad-pod
       match:
         any:
         - resources:
             kinds:
               - Pod
-            namespaces:
-              - openshift-cluster-version
-            names:
-              - cluster-version-operator-6869f6c45d-q7qjr
       validate:
         message: >-
-          This is hostaccess policy  - provide access at host level.
+          This is nonroot-anyuid policy  - provide access at host level.
         pattern:
           spec:
             securityContext:
-              runAsUser: "?*"
-              fsGroup: "?*"
+              fsGroup: "1000-65535"
               supplementalGroups: "?*"
             =(hostNetwork): false
             =(hostIPC): false
@@ -37,18 +32,21 @@ spec:
             =(ephemeralContainers):
                 securityContext:
                   allowPrivilegeEscalation: true
+                  runAsNonRoot: "true"
                   readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             =(initContainers):
                 securityContext:
                   allowPrivilegeEscalation: true
+                  runAsNonRoot: "true"
                   readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             containers:
             - securityContext:
                 allowPrivilegeEscalation: true
+                runAsNonRoot: "true"
                 readOnlyRootFilesystem: false
                 seLinuxOptions:
                   level: "?*"

@@ -1,0 +1,227 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name:  kyverno-privileged
+  annotations:
+    policies.kyverno.io/title:  privileged
+    policies.kyverno.io/category: Visa-Custom
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    kyverno.io/kyverno-version: 1.9.2
+    kyverno.io/kubernetes-version: "1.23-1.26"
+    policies.kyverno.io/description: >-
+      Custom Policy for privileged deplyment at Visa     
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: securityContext-hostlevelvalidation
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - isilon
+            names:
+              - isilon-node-4p5rm
+              - isilon-node-6rrfw
+              - isilon-node-866ms
+              - isilon-node-b8gxj
+              - isilon-node-bcs8s
+              - isilon-node-n5xtj
+              - isilon-node-xs6k5
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-cluster-node-tuning-operator
+            names:
+              - tuned-4p9tr
+              - tuned-6tg29
+              - tuned-bf5xv
+              - tuned-fzw9q
+              - tuned-n6csf
+              - tuned-rtgr2
+              - tuned-v8xc4
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-image-registry
+            names:
+              - node-ca-2ws89
+              - node-ca-bjr5h
+              - node-ca-cqjrd
+              - node-ca-j4mdq
+              - node-ca-kjvpk
+              - node-ca-qgrfb
+              - node-ca-s8dp7
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-machine-config-operator
+            names:
+              - machine-config-daemon-8l287
+              - machine-config-daemon-dg6fh
+              - machine-config-daemon-mfpzd
+              - machine-config-daemon-ml4n9
+              - machine-config-daemon-ptms2
+              - machine-config-daemon-vf4tw
+              - machine-config-daemon-zktth
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-nmstate
+            names:
+              - nmstate-handler-2cm6m
+              - nmstate-handler-bmxr5
+              - nmstate-handler-cphkc
+              - nmstate-handler-dz42t
+              - nmstate-handler-jj85d
+              - nmstate-handler-pqf8n
+              - nmstate-handler-r9t5n
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - splunk-k8
+            names:
+              - splunk-kubernetes-logging-fluent-bit-5jwzg
+              - splunk-kubernetes-logging-fluent-bit-7hk6q
+              - splunk-kubernetes-logging-fluent-bit-fbhn7
+              - splunk-kubernetes-logging-fluent-bit-fhrk9
+              - splunk-kubernetes-logging-fluent-bit-lzdqf
+              - splunk-kubernetes-logging-fluent-bit-n7pvd
+              - splunk-kubernetes-logging-fluent-bit-s8d85
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - vxflexos
+            names:
+              - vxflexos-node-4lhvm
+              - vxflexos-node-7gt99
+              - vxflexos-node-l8zkm
+              - vxflexos-node-mp68k
+              - vxflexos-node-pxn6n
+              - vxflexos-node-q48gl
+              - vxflexos-node-t9dpj
+      validate:
+        message: >-
+          Policy for privileged.         
+        pattern:
+          spec:
+            hostNetwork: true
+            =(hostIPC): true
+            =(hostPID): true
+            securityContext:
+              runAsUser: "?*"
+              fsGroup: "?*"
+              supplementalGroups: "?*"    
+            =(ephemeralContainers):
+            - securityContext:
+                allowPrivilegeEscalation: true
+                readOnlyRootFilesystem: false
+                privileged: true
+                seLinuxOptions:
+                  level: "?*"
+            =(initContainers):
+            - securityContext:
+                allowPrivilegeEscalation: true
+                readOnlyRootFilesystem: false
+                privileged: true
+                seLinuxOptions:
+                  level: "?*"
+            containers:
+            - securityContext:
+                allowPrivilegeEscalation: true
+                readOnlyRootFilesystem: false
+                privileged: true
+                seLinuxOptions:
+                  level: "?*"
+    - name: host-ports
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Use of host ports. The fields spec.containers[*].ports[*].hostPort
+          , spec.initContainers[*].ports[*].hostPort, and spec.ephemeralContainers[*].ports[*].hostPort
+          must either be unset or set between `0-65535`.          
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - =(ports):
+                  - =(hostPort): "0-65535"
+            =(initContainers):
+              - =(ports):
+                  - =(hostPort): "0-65535"
+            containers:
+              - =(ports):
+                  - =(hostPort): "0-65535"
+    - name: allow-system-cluster-admin-group-binding
+      match:
+        any:
+        - resources:
+            kinds:
+              - RoleBinding
+              - ClusterRoleBinding
+      validate:
+        message: "Only Binding to system:cluster-admins is allowed."
+        pattern:
+          roleRef:
+            name: "system:cluster-admins"
+    - name: allow-system-nodes-group-binding
+      match:
+        any:
+        - resources:
+            kinds:
+              - RoleBinding
+              - ClusterRoleBinding
+      validate:
+        message: "Only Binding to system:nodes is allowed."
+        pattern:
+          roleRef:
+            name: "system:nodes"
+    - name: allow-system-masters-group-binding
+      match:
+        any:
+        - resources:
+            kinds:
+              - RoleBinding
+              - ClusterRoleBinding
+      validate:
+        message: "Only Binding to system:masters is allowed."
+        pattern:
+          roleRef:
+            name: "system:masters"
+    - name: allow-system-admin-user-binding
+      match:
+        any:
+        - resources:
+            kinds:
+              - RoleBinding
+              - ClusterRoleBinding
+      validate:
+        message: "Only Binding to system:admin is allowed."
+        pattern:
+          roleRef:
+            name: "system:admin"
+    - name: restrict-users
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate: 
+        message: >-
+          Invalid User/ServiceAccount.
+        pattern:
+          spec:
+            serviceAccount: "openshift-infra:build-controller"
+            #serviceAccountName: "openshift-infra:build-controller"
