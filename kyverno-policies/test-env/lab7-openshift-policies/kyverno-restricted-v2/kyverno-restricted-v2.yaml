@@ -1,0 +1,417 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restricted-v2
+  annotations:
+    policies.kyverno.io/description: >-
+       Restricted Policy - Disallow privilege escalation, such as via set-user-ID or set-group-ID file mode, should not be allowed.
+       This policy ensures the `allowPrivilegeEscalation` field is set to `false`.      
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: securitycontext-hostlevelvalidation
+      match:
+        any:
+       - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - codefresh
+            names:
+              - argo-platform-abac-597776c665-skztd
+              - argo-platform-analytics-reporter-ccc47dc95-kv28p
+              - argo-platform-api-events-7954bdc5c5-p5q2f
+              - argo-platform-api-graphql-86779ddb5d-rk6g4
+              - argo-platform-audit-7bbc9f7dc5-h4v67
+              - argo-platform-cron-executor-7c9695f4-pd5qr
+              - argo-platform-event-handler-56645f589-mdsvn
+              - argo-platform-ui-cd7bdbf6f-srqbx
+              - cf-argo-hub-platform-58d9c9cc67-dgf4w
+              - cf-cf-broadcaster-9f64f5685-88hf8
+              - cf-cf-broadcaster-9f64f5685-fcrg6
+              - cf-cfapi-5d5d975755-khhcd
+              - cf-cfapi-5d5d975755-vgwmj
+              - cf-cfui-7fc9c7c99b-7hqh6
+              - cf-chartmuseum-677f4bc486-wxlpw
+              - cf-charts-manager-5dfd74d6d8-fc8lp
+              - cf-cluster-providers-5df75db9b4-fdxt7
+              - cf-codefresh-postgres-clean-28333440-5mhph
+              - cf-codefresh-postgres-clean-28333440-7gbd4
+              - cf-codefresh-postgres-clean-28333440-7qcv2
+              - cf-codefresh-postgres-clean-28333440-99gbg
+              - cf-codefresh-postgres-clean-28333440-cj7mb
+              - cf-codefresh-postgres-clean-28333440-dt2f4
+              - cf-codefresh-postgres-clean-28333440-npmjl
+              - cf-context-manager-7ff6675c56-dmxrb
+              - cf-cronus-69758b47b4-8wl8n
+              - cf-gitops-dashboard-manager-844f9f6d55-smckx
+              - cf-helm-repo-manager-54f7b6c4f8-t7q7f
+              - cf-hermes-5f778455fd-8zl8x
+              - cf-internal-gateway-76f87ff4cc-qxq5z
+              - cf-internal-gateway-76f87ff4cc-tlxml
+              - cf-k8s-monitor-8546fc9448-955sn
+              - cf-kube-integration-859d9db476-525r6
+              - cf-nats-0
+              - cf-nomios-54c9c9ccd8-knvhl
+              - cf-pipeline-manager-6658fb49dd-mjq4q
+              - cf-platform-analytics-5c6b7d8b68-dpqc5
+              - cf-runtime-environment-manager-67c8d58d44-pbz76
+              - cf-system-etl-postgres-28334504-8s2qq
+              - cf-system-etl-postgres-28334504-99d96
+              - cf-system-etl-postgres-28334504-cqbfm
+              - cf-system-etl-postgres-28334504-pnbd5
+              - cf-system-etl-postgres-28334504-tgqgk
+              - cf-system-etl-postgres-28334504-vpbxx
+              - cf-system-etl-postgres-28334504-zqgml
+              - cf-system-etl-postgres-28334552-6rnh2
+              - cf-system-etl-postgres-28334552-7ctzv
+              - cf-system-etl-postgres-28334552-d5nh7
+              - cf-system-etl-postgres-28334552-dhrtq
+              - cf-system-etl-postgres-28334552-dncpm
+              - cf-system-etl-postgres-28334552-tlg8s
+              - cf-system-etl-postgres-28334552-wk68k
+              - cf-tasker-kubernetes-c846c6d68-mhv7s
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - enterprise-kyverno-operator
+            names:
+              - enterprise-kyverno-operator-9bf486d6f-87lbv
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - isilon-test
+            names:
+              - sl73oscls7bw01-6459ccdc9d-h42rm
+              - sl73oscls7bw02-7fc9f66fc9-tbj8m
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - isilon
+            names:
+              - isilon-controller-8b487597c-nln4h
+              - isilon-controller-8b487597c-qt247
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - kyverno
+            names:
+              - kyverno-7f44bf4765-84fmb
+              - kyverno-7f44bf4765-gkkf8
+              - kyverno-7f44bf4765-qdbg7
+              - kyverno-cleanup-controller-6d7fd68d59-zc2lw
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-cloud-credential-operator
+            names:
+              - cloud-credential-operator-56c8fc954c-jqjxk
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-cluster-samples-operator
+            names:
+              - cluster-samples-operator-9df86d7dc-llh2c
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-cluster-storage-operator
+            names:
+              - csi-snapshot-controller-58668b9674-49hxj
+              - csi-snapshot-controller-58668b9674-vff4r
+              - csi-snapshot-webhook-94b7b6496-dq7x6
+              - csi-snapshot-webhook-94b7b6496-hkmbk
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-console-operator
+            names:
+              - console-operator-6dd45d48db-nqh9z
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-console
+            names:
+              - console-5bd6fbf4cd-5jdpx
+              - console-5bd6fbf4cd-r94wp
+              - downloads-6779fbf7d7-g29q2
+              - downloads-6779fbf7d7-wpvlb
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-controller-manager
+            names:
+              - controller-manager-6xxlw
+              - controller-manager-87lzk
+              - controller-manager-n6789
+              - controller-manager-rnmsw
+              - controller-manager-v8645
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-image-registry
+            names:
+              - cluster-image-registry-operator-6f776c5f85-xxb67
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-ingress-canary
+            names:
+              - ingress-canary-9f2pf
+              - ingress-canary-9g8w9
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-ingress-operator
+            names:
+              - ingress-operator-6dcbcc555d-54nl9
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-insights
+            names:
+              - insights-operator-59bb79ff6f-tdxpw
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-machine-api
+            names:
+              - cluster-autoscaler-operator-5bc9f48cdc-5xbts
+              - machine-api-operator-f8665c4f4-9n2dl
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-machine-config-operator
+            names:
+              - machine-config-controller-556cfdf5c-69jns
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-marketplace
+            names:
+              - marketplace-operator-69c64f869d-2ngt8
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-monitoring
+            names:
+              - cluster-monitoring-operator-9fd845b69-zwd6f
+              - kube-state-metrics-5dbfdc4bc7-bkz85
+              - openshift-state-metrics-6858676844-5d57p
+              - prometheus-adapter-9b4b54ff7-c2cns
+              - prometheus-adapter-9b4b54ff7-v8n7n
+              - prometheus-operator-8f49d7877-kjzgr
+              - prometheus-operator-admission-webhook-745b7d6787-hhvjg
+              - prometheus-operator-admission-webhook-745b7d6787-xt7xn
+              - thanos-querier-566d9657c6-9q95m
+              - thanos-querier-566d9657c6-g94nr
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-network-diagnostics
+            names:
+              - network-check-source-6955f966d5-zzl67
+              - network-check-target-2m4x7
+              - network-check-target-dh5v5
+              - network-check-target-frmwm
+              - network-check-target-lq4xw
+              - network-check-target-nkjsw
+              - network-check-target-qtbz9
+              - network-check-target-vzpjp
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-nmstate
+            names:
+              - nmstate-cert-manager-5cb6865494-hllc5
+              - nmstate-operator-55fc4d5d5f-fpdss
+              - nmstate-webhook-7477758766-lfrnh
+              - nmstate-webhook-7477758766-rrpfb
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-operator-lifecycle-manager
+            names:
+              - collect-profiles-28334550-m4jqh
+              - collect-profiles-28334565-zgj9n
+              - collect-profiles-28334580-phrxx
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - openshift-service-ca
+            names:
+              - service-ca-7cf6c689d-q9c8c
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - vxflexos
+            names:
+              - vxflexos-controller-699b6d46f6-fk54t
+              - vxflexos-controller-699b6d46f6-vv9pr
+      validate:
+        message: >-
+          This is  Restricted policy  - restricting access at host level, disallow privilege escalation and restricting volume types.        
+        pattern:
+          spec:
+            securityContext:
+              runAsUser: "1000-65535"
+              fsGroup: "1000-65535"
+              supplementalGroups: "?*"
+            =(hostNetwork): false
+            =(hostIPC): false
+            =(hostPID): false 
+            =(ephemeralContainers):
+                securityContext:
+                  allowPrivilegeEscalation: "false"
+                  readOnlyRootFilesystem: "false"
+                  capabilities:
+                    drop:
+                      - all                  
+                  seLinuxOptions:
+                    level: "?*"
+            =(initContainers):
+                securityContext:
+                  allowPrivilegeEscalation: "false"
+                  capabilities:
+                    drop:
+                      - all
+                  readOnlyRootFilesystem: "false"
+                  seLinuxOptions:
+                    level: "?*"
+            containers:
+            - securityContext:
+                allowPrivilegeEscalation: "false"
+                capabilities:
+                  drop:
+                    - all
+                readOnlyRootFilesystem: "false"
+                seLinuxOptions:
+                  level: "?*"
+    - name: restricted-v2-volumes
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      preconditions:
+        all:
+        - key: "{{ request.operation || 'BACKGROUND' }}"
+          operator: NotEquals
+          value: DELETE
+      validate:
+        message: >-
+          Only the following types of volumes may be used: configMap, downwardAPI,
+          emptyDir, persistentVolumeClaim, projected, and secret.
+        deny:
+          conditions:
+            all:
+            - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
+              operator: AnyNotIn
+              value:
+              - name
+              - configMap
+              - downwardAPI
+              - emptyDir
+              - persistentVolumeClaim
+              - projected
+              - secret
+              - ''
+    - name: host-ports-none
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort
+          , spec.initContainers[*].ports[*].hostPort, and spec.ephemeralContainers[*].ports[*].hostPort
+          must either be unset or set to `0`.          
+        pattern:
+          spec:
+            =(ephemeralContainers):
+              - =(ports):
+                  - =(hostPort): 0
+            =(initContainers):
+              - =(ports):
+                  - =(hostPort): 0
+            containers:
+              - =(ports):
+                  - =(hostPort): 0
+    - name: required-add-capabilities
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      preconditions:
+        all:
+        - key: "{{ request.operation || 'BACKGROUND' }}"
+          operator: NotEquals
+          value: DELETE
+      validate:
+        message: >-
+                    Any container needs to have NET_BIND_SERVICE capabilities.
+        foreach:
+          - list: request.object.spec.[ephemeralContainers, initContainers, containers][]
+            deny:
+              conditions:
+                any:
+                - key: NET_BIND_SERVICE
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.add[].to_upper(@) || `[]` }}"
+    - name: check-seccomp
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Use of custom Seccomp profiles is disallowed. The fields
+          spec.securityContext.seccompProfile.type,
+          spec.containers[*].securityContext.seccompProfile.type,
+          spec.initContainers[*].securityContext.seccompProfile.type, and
+          spec.ephemeralContainers[*].securityContext.seccompProfile.type
+          must be unset or set to `RuntimeDefault`.          
+        pattern:
+          spec:
+            =(securityContext):
+              =(seccompProfile):
+                =(type): "RuntimeDefault"      
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(seccompProfile):
+                  =(type): "RuntimeDefault"
+            =(initContainers):
+            - =(securityContext):
+                =(seccompProfile):
+                  =(type): "RuntimeDefault"
+            containers:
+            - =(securityContext):
+                =(seccompProfile):
+                  =(type): "RuntimeDefault"

@@ -1,55 +1,53 @@
-# Need to add allowHostDirVolumePlugin, allowPrivilegedContainer
-
-
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: hostaccess
+  name: restricted
   annotations:
     policies.kyverno.io/description: >-
-      hostaccess Policy - Allow hostaccess privilege.      
+      Restricted Policy - Disallow privilege escalation, such as via set-user-ID or set-group-ID file mode, should not be allowed.
+      This policy ensures the `allowPrivilegeEscalation` field is set to `false`.      
 spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: scc-hostaccess-bad-pod
+    - name: securitycontext-hostlevelvalidation
       match:
         any:
         - resources:
             kinds:
               - Pod
             namespaces:
-              - openshift-cluster-version
+              - isilon-test
             names:
-              - cluster-version-operator-6869f6c45d-q7qjr
+              - sl73oscls7bs01-686f4b5b6b-dhr75
       validate:
         message: >-
-          This is hostaccess policy  - provide access at host level.
+          This is  Restricted policy  - restricting access at host level, disallow privilege escalation and restricting volume types.        
         pattern:
           spec:
             securityContext:
-              runAsUser: "?*"
-              fsGroup: "?*"
+              runAsUser: "1000-65535"
+              fsGroup: "1000-65535"
               supplementalGroups: "?*"
             =(hostNetwork): false
             =(hostIPC): false
             =(hostPID): false 
             =(ephemeralContainers):
                 securityContext:
-                  allowPrivilegeEscalation: true
-                  readOnlyRootFilesystem: false
+                  allowPrivilegeEscalation: "false"
+                  readOnlyRootFilesystem: "true"
                   seLinuxOptions:
                     level: "?*"
             =(initContainers):
                 securityContext:
-                  allowPrivilegeEscalation: true
-                  readOnlyRootFilesystem: false
+                  allowPrivilegeEscalation: "false"
+                  readOnlyRootFilesystem: "true"
                   seLinuxOptions:
                     level: "?*"
             containers:
             - securityContext:
-                allowPrivilegeEscalation: true
-                readOnlyRootFilesystem: false
+                allowPrivilegeEscalation: "false"
+                readOnlyRootFilesystem: "true"
                 seLinuxOptions:
                   level: "?*"
     - name: restricted-volumes
@@ -77,7 +75,6 @@ spec:
               - configMap
               - downwardAPI
               - emptyDir
-              - hostPath
               - persistentVolumeClaim
               - projected
               - secret
@@ -135,4 +132,15 @@ spec:
                 - key: SETGID
                   operator: AnyNotIn
                   value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
-
+    - name: allo-system-authenticate-group-binding
+      match:
+        any:
+        - resources:
+            kinds:
+              - RoleBinding
+              - ClusterRoleBinding
+      validate:
+        message: "Only Binding to system:authenticated is allowed."
+        pattern:
+          roleRef:
+            name: "system:authenticated"

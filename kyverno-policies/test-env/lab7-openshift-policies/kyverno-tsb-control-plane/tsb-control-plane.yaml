@@ -1,0 +1,102 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: tsb-control-plane
+  annotations:
+    policies.kyverno.io/title: Disallow Privilege Escalation
+    policies.kyverno.io/category: Pod Security Standards (Restricted)
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    kyverno.io/kyverno-version: 1.9.2
+    kyverno.io/kubernetes-version: "1.22-1.23"
+    policies.kyverno.io/description: >-
+      Privilege escalation, such as via set-user-ID or set-group-ID file mode, should not be allowed.
+      This policy ensures the `allowPrivilegeEscalation` field is set to `false`.      
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: securityContext-hostlevelvalidation
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Policy for TSB controle-plane.         
+        pattern:
+          spec:
+            securityContext:
+              runAsUser: '1000-1400'
+              fsGroup: '1000-1400'
+            =(hostNetwork): "false"
+            =(hostPID): "false"
+            =(hostIPC): "?*"
+            =(ephemeralContainers):
+              securityContext:
+                allowPrivilegeEscalation: "false"
+                privileged: "false"
+                capabilities:
+                  drop:
+                    - all
+                readOnlyRootFilesystem: "false"
+                seLinuxOptions:
+                  level: "?*"
+            =(initContainers):
+              securityContext:
+                allowPrivilegeEscalation: "false"
+                privileged: "false"
+                capabilities:
+                  drop:
+                    - all
+                readOnlyRootFilesystem: "false"
+                seLinuxOptions:
+                  level: "?*"
+            containers:
+              - securityContext:
+                 allowPrivilegeEscalation: "false"
+                 privileged: "false"
+                 capabilities:
+                   drop:
+                    - all
+                 readOnlyRootFilesystem: "false"
+                 seLinuxOptions:
+                   level: "?*"
+    - name: restricted-volumes
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      validate:
+        message: >-
+          Only the following types of volumes may be used: configMap, downwardAPI,
+          emptyDir, persistentVolumeClaim, projected, and secret.          
+        deny:
+          conditions:
+            all:
+            - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
+              operator: AnyNotIn
+              value:
+              - name
+              - configMap
+              - downwardAPI
+              - emptyDir
+              - persistentVolumeClaim
+              - projected
+              - secret
+              - ''
+#    - name: restrict-users
+#      match:
+#        any:
+#        - resources:
+#            kinds:
+#              - Pod
+#      validate: 
+#        message: >-
+#          Invalid User/ServiceAccount.
+#        pattern:
+#          spec:
+#            serviceAccount: "istiosystem | istio-system | kube-system:istio"
+#            serviceAccountName: "istiosystem | istio-system | kube-system:istio"

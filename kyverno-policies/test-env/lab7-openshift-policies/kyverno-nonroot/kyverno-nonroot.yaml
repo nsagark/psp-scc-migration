@@ -1,35 +1,36 @@
 # Need to add allowHostDirVolumePlugin, allowPrivilegedContainer
-
+# check unAsUser value
 
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: hostaccess
+  name: nonroot
   annotations:
     policies.kyverno.io/description: >-
-      hostaccess Policy - Allow hostaccess privilege.      
+      nonroot Policy - Allow nonroot privilege.      
 spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: scc-hostaccess-bad-pod
+    - name: scc-nonroot-bad-pod
       match:
         any:
         - resources:
             kinds:
               - Pod
             namespaces:
-              - openshift-cluster-version
+              - openshift-monitoring
             names:
-              - cluster-version-operator-6869f6c45d-q7qjr
+              - alertmanager-main-0
+              - alertmanager-main-1
+              - prometheus-k8s-0
+              - prometheus-k8s-1
       validate:
         message: >-
-          This is hostaccess policy  - provide access at host level.
+          This is nonroot policy  - provide access at host level.
         pattern:
           spec:
             securityContext:
-              runAsUser: "?*"
-              fsGroup: "?*"
               supplementalGroups: "?*"
             =(hostNetwork): false
             =(hostIPC): false
@@ -37,18 +38,21 @@ spec:
             =(ephemeralContainers):
                 securityContext:
                   allowPrivilegeEscalation: true
+                  runAsNonRoot: "true"
                   readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             =(initContainers):
                 securityContext:
                   allowPrivilegeEscalation: true
+                  runAsNonRoot: "true"
                   readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             containers:
             - securityContext:
                 allowPrivilegeEscalation: true
+                runAsNonRoot: "true"
                 readOnlyRootFilesystem: false
                 seLinuxOptions:
                   level: "?*"

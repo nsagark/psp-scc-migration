@@ -1,0 +1,1376 @@
+apiVersion: v1
+items:
+- allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: false
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: RunAsAny
+  groups:
+  - system:cluster-admins
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: anyuid provides all features of the restricted SCC
+        but allows users to run with any UID and any GID.
+      release.openshift.io/create-only: "true"
+    creationTimestamp: "2022-04-30T16:38:08Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+            f:release.openshift.io/create-only: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-bootstrap
+      operation: Update
+      time: "2022-04-30T16:38:08Z"
+    name: anyuid
+    resourceVersion: "459"
+    uid: af63708d-8a41-4b23-a599-96202349ab73
+  priority: 10
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - MKNOD
+  runAsUser:
+    type: RunAsAny
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: RunAsAny
+  users: []
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: true
+  allowHostIPC: true
+  allowHostNetwork: true
+  allowHostPID: true
+  allowHostPorts: true
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: MustRunAs
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: 'hostaccess allows access to all host namespaces
+        but still requires pods to be run with a UID and SELinux context that are
+        allocated to the namespace. WARNING: this SCC allows host access to namespaces,
+        file systems, and PIDS.  It should only be used by trusted pods.  Grant with
+        caution.'
+      release.openshift.io/create-only: "true"
+    creationTimestamp: "2022-04-30T16:38:08Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+            f:release.openshift.io/create-only: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-bootstrap
+      operation: Update
+      time: "2022-04-30T16:38:08Z"
+    name: hostaccess
+    resourceVersion: "461"
+    uid: 78338c5f-a858-4f12-a03e-4eafa90531ed
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - KILL
+  - MKNOD
+  - SETUID
+  - SETGID
+  runAsUser:
+    type: MustRunAsRange
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: RunAsAny
+  users: []
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - hostPath
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: true
+  allowHostIPC: false
+  allowHostNetwork: false
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: RunAsAny
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: |-
+        hostmount-anyuid provides all the features of the
+        restricted SCC but allows host mounts and any UID by a pod.  This is primarily
+        used by the persistent volume recycler. WARNING: this SCC allows host file
+        system access as any UID, including UID 0.  Grant with caution.
+      release.openshift.io/create-only: "true"
+    creationTimestamp: "2022-04-30T16:38:08Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+            f:release.openshift.io/create-only: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-bootstrap
+      operation: Update
+      time: "2022-04-30T16:38:08Z"
+    name: hostmount-anyuid
+    resourceVersion: "462"
+    uid: a99ee49c-e9f9-4417-9db2-ccf695c4b5c4
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - MKNOD
+  runAsUser:
+    type: RunAsAny
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: RunAsAny
+  users:
+  - system:serviceaccount:openshift-infra:pv-recycler-controller
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - hostPath
+  - nfs
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: true
+  allowHostPID: false
+  allowHostPorts: true
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: MustRunAs
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: hostnetwork allows using host networking and host
+        ports but still requires pods to be run with a UID and SELinux context that
+        are allocated to the namespace.
+      release.openshift.io/create-only: "true"
+    creationTimestamp: "2022-04-30T16:38:09Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+            f:release.openshift.io/create-only: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-bootstrap
+      operation: Update
+      time: "2022-04-30T16:38:09Z"
+    name: hostnetwork
+    resourceVersion: "463"
+    uid: b18cd8a5-514f-44b7-9852-54389a120b3e
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - KILL
+  - MKNOD
+  - SETUID
+  - SETGID
+  runAsUser:
+    type: MustRunAsRange
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: MustRunAs
+  users: []
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: true
+  allowHostPID: false
+  allowHostPorts: true
+  allowPrivilegeEscalation: false
+  allowPrivilegedContainer: false
+  allowedCapabilities:
+  - NET_BIND_SERVICE
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: MustRunAs
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: hostnetwork allows using host networking and host
+        ports but still requires pods to be run with a UID and SELinux context that
+        are allocated to the namespace. On top of the legacy 'hostnetwork' SCC, it
+        also requires to drop ALL capabilities and does not allow privilege escalation
+        binaries. It will also default the seccomp profile to runtime/default if unset,
+        otherwise this seccomp profile is required.
+    creationTimestamp: "2023-03-27T19:46:53Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+          f:ownerReferences:
+            .: {}
+            k:{"uid":"3a3cf2a3-760c-4052-b148-8664342dcd52"}: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:seccompProfiles: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-version-operator
+      operation: Update
+      time: "2023-03-27T19:46:53Z"
+    name: hostnetwork-v2
+    ownerReferences:
+    - apiVersion: config.openshift.io/v1
+      kind: ClusterVersion
+      name: version
+      uid: 3a3cf2a3-760c-4052-b148-8664342dcd52
+    resourceVersion: "1182744205"
+    uid: 37ffccf7-46bd-4ed3-9fc8-2de8330ab46b
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - ALL
+  runAsUser:
+    type: MustRunAsRange
+  seLinuxContext:
+    type: MustRunAs
+  seccompProfiles:
+  - runtime/default
+  supplementalGroups:
+    type: MustRunAs
+  users: []
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: true
+  allowHostIPC: false
+  allowHostNetwork: true
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: MustRunAs
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/self-managed-high-availability: "true"
+      kubernetes.io/description: machine-api-termination-handler allows the machine-api-termination-handler
+        service account to run as root, access host paths and access the host network.
+        This SCC is limited and should not be used for any other service.
+    creationTimestamp: "2022-04-30T16:39:24Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:kubernetes.io/description: {}
+          f:ownerReferences:
+            .: {}
+            k:{"uid":"3a3cf2a3-760c-4052-b148-8664342dcd52"}: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-version-operator
+      operation: Update
+      time: "2022-04-30T16:39:24Z"
+    name: machine-api-termination-handler
+    ownerReferences:
+    - apiVersion: config.openshift.io/v1
+      kind: ClusterVersion
+      name: version
+      uid: 3a3cf2a3-760c-4052-b148-8664342dcd52
+    resourceVersion: "2446"
+    uid: 23bb445f-da56-461e-b6b0-ee1c986d59b4
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - KILL
+  - MKNOD
+  - SETUID
+  - SETGID
+  runAsUser:
+    type: RunAsAny
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: MustRunAs
+  users:
+  - system:serviceaccount:openshift-machine-api:machine-api-termination-handler
+  volumes:
+  - downwardAPI
+  - hostPath
+- allowHostDirVolumePlugin: true
+  allowHostIPC: false
+  allowHostNetwork: true
+  allowHostPID: true
+  allowHostPorts: true
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: true
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: RunAsAny
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      kubernetes.io/description: node-exporter scc is used for the Prometheus node
+        exporter
+    creationTimestamp: "2022-04-30T16:45:04Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:kubernetes.io/description: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups: {}
+        f:users: {}
+      manager: Go-http-client
+      operation: Update
+      time: "2022-04-30T16:45:04Z"
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:groups: {}
+        f:volumes: {}
+      manager: operator
+      operation: Update
+      time: "2023-03-27T20:19:07Z"
+    name: node-exporter
+    resourceVersion: "1182821646"
+    uid: 9f8f06d7-0982-4768-a4e6-0cd0c726704f
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities: null
+  runAsUser:
+    type: RunAsAny
+  seLinuxContext:
+    type: RunAsAny
+  supplementalGroups:
+    type: RunAsAny
+  users: []
+  volumes:
+  - '*'
+- allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: false
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: RunAsAny
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: nonroot provides all features of the restricted SCC
+        but allows users to run with any non-root UID.  The user must specify the
+        UID or it must be specified on the by the manifest of the container runtime.
+      release.openshift.io/create-only: "true"
+    creationTimestamp: "2022-04-30T16:38:09Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+            f:release.openshift.io/create-only: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-bootstrap
+      operation: Update
+      time: "2022-04-30T16:38:09Z"
+    name: nonroot
+    resourceVersion: "467"
+    uid: 44a09e1d-047f-4504-bf5a-566d7dea0d13
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - KILL
+  - MKNOD
+  - SETUID
+  - SETGID
+  runAsUser:
+    type: MustRunAsNonRoot
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: RunAsAny
+  users: []
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: false
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    ranges:
+    - max: 65535
+      min: 1000
+    type: MustRunAs
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"allowHostDirVolumePlugin":false,"allowHostIPC":false,"allowHostNetwork":false,"allowHostPID":false,"allowHostPorts":false,"allowPrivilegeEscalation":true,"allowPrivilegedContainer":false,"allowedCapabilities":null,"apiVersion":"security.openshift.io/v1","defaultAddCapabilities":null,"fsGroup":{"ranges":[{"max":65535,"min":1000}],"type":"MustRunAs"},"groups":[],"kind":"SecurityContextConstraints","metadata":{"annotations":{},"name":"nonroot-anyuid"},"priority":null,"readOnlyRootFilesystem":false,"requiredDropCapabilities":["KILL","MKNOD","SETUID","SETGID"],"runAsUser":{"type":"MustRunAsNonRoot"},"seLinuxContext":{"type":"MustRunAs"},"supplementalGroups":{"type":"RunAsAny"},"users":[],"volumes":["configMap","downwardAPI","emptyDir","persistentVolumeClaim","projected","secret"]}
+    creationTimestamp: "2022-06-01T16:08:38Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:ranges: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2022-06-07T19:10:29Z"
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2023-06-07T16:50:47Z"
+    name: nonroot-anyuid
+    resourceVersion: "1357635318"
+    uid: cd47f40e-546c-4e87-9713-d0609ff527a0
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - KILL
+  - MKNOD
+  - SETUID
+  - SETGID
+  runAsUser:
+    type: MustRunAsNonRoot
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: RunAsAny
+  users: []
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: false
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: false
+  allowPrivilegedContainer: false
+  allowedCapabilities:
+  - NET_BIND_SERVICE
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: RunAsAny
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: nonroot provides all features of the restricted SCC
+        but allows users to run with any non-root UID.  The user must specify the
+        UID or it must be specified on the by the manifest of the container runtime.
+        On top of the legacy 'nonroot' SCC, it also requires to drop ALL capabilities
+        and does not allow privilege escalation binaries. It will also default the
+        seccomp profile to runtime/default if unset, otherwise this seccomp profile
+        is required.
+    creationTimestamp: "2023-03-27T19:46:53Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+          f:ownerReferences:
+            .: {}
+            k:{"uid":"3a3cf2a3-760c-4052-b148-8664342dcd52"}: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:seccompProfiles: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-version-operator
+      operation: Update
+      time: "2023-03-27T19:46:53Z"
+    name: nonroot-v2
+    ownerReferences:
+    - apiVersion: config.openshift.io/v1
+      kind: ClusterVersion
+      name: version
+      uid: 3a3cf2a3-760c-4052-b148-8664342dcd52
+    resourceVersion: "1182744213"
+    uid: bfd863be-b8a6-4d3c-ab69-7654f335a1f3
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - ALL
+  runAsUser:
+    type: MustRunAsNonRoot
+  seLinuxContext:
+    type: MustRunAs
+  seccompProfiles:
+  - runtime/default
+  supplementalGroups:
+    type: RunAsAny
+  users: []
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: true
+  allowHostIPC: true
+  allowHostNetwork: true
+  allowHostPID: true
+  allowHostPorts: true
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: true
+  allowedCapabilities:
+  - '*'
+  allowedUnsafeSysctls:
+  - '*'
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: RunAsAny
+  groups:
+  - system:cluster-admins
+  - system:nodes
+  - system:masters
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: 'privileged allows access to all privileged and host
+        features and the ability to run as any user, any group, any fsGroup, and with
+        any SELinux context.  WARNING: this is the most relaxed SCC and should be
+        used only for cluster administration. Grant with caution.'
+      release.openshift.io/create-only: "true"
+    creationTimestamp: "2022-04-30T16:38:10Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:allowedUnsafeSysctls: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+            f:release.openshift.io/create-only: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:seccompProfiles: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-bootstrap
+      operation: Update
+      time: "2022-04-30T16:38:10Z"
+    name: privileged
+    resourceVersion: "468"
+    uid: 8abcb3cb-026f-486b-9b9d-0c884c30fa02
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities: null
+  runAsUser:
+    type: RunAsAny
+  seLinuxContext:
+    type: RunAsAny
+  seccompProfiles:
+  - '*'
+  supplementalGroups:
+    type: RunAsAny
+  users:
+  - system:admin
+  - system:serviceaccount:openshift-infra:build-controller
+  volumes:
+  - '*'
+- allowHostDirVolumePlugin: true
+  allowHostIPC: true
+  allowHostNetwork: true
+  allowHostPID: true
+  allowHostPorts: true
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: true
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: RunAsAny
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"allowHostDirVolumePlugin":true,"allowHostIPC":true,"allowHostNetwork":true,"allowHostPID":true,"allowHostPorts":true,"allowPrivilegedContainer":true,"apiVersion":"security.openshift.io/v1","kind":"SecurityContextConstraints","metadata":{"annotations":{},"name":"qualys-agent-scc"},"readOnlyRootFilesystem":false,"runAsUser":{"type":"RunAsAny"},"seLinuxContext":{"type":"RunAsAny"},"users":["system:serviceaccount:qualys-agent:qualys-agent-sa"]}
+    creationTimestamp: "2022-06-01T16:08:38Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegedContainer: {}
+        f:metadata:
+          f:annotations: {}
+        f:readOnlyRootFilesystem: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:users: {}
+      manager: argocd-application-controller
+      operation: Update
+      time: "2022-06-01T16:08:38Z"
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            f:kubectl.kubernetes.io/last-applied-configuration: {}
+      manager: kubectl-client-side-apply
+      operation: Update
+      time: "2023-06-07T16:50:47Z"
+    name: qualys-agent-scc
+    resourceVersion: "1357635321"
+    uid: 3f5327aa-7b3d-4bd1-8518-9b019c66a0ca
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities: null
+  runAsUser:
+    type: RunAsAny
+  seLinuxContext:
+    type: RunAsAny
+  supplementalGroups:
+    type: RunAsAny
+  users:
+  - system:serviceaccount:qualys-agent:qualys-agent-sa
+  volumes:
+  - '*'
+- allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: false
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: MustRunAs
+  groups:
+  - system:authenticated
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: restricted denies access to all host features and
+        requires pods to be run with a UID, and SELinux context that are allocated
+        to the namespace.  This is the most restrictive SCC and it is used by default
+        for authenticated users.
+      release.openshift.io/create-only: "true"
+    creationTimestamp: "2022-04-30T16:38:10Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+            f:release.openshift.io/create-only: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-bootstrap
+      operation: Update
+      time: "2022-04-30T16:38:10Z"
+    name: restricted
+    resourceVersion: "469"
+    uid: 8b91e62b-9329-417b-b261-9126c0104fe8
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - KILL
+  - MKNOD
+  - SETUID
+  - SETGID
+  runAsUser:
+    type: MustRunAsRange
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: RunAsAny
+  users: []
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: false
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: false
+  allowPrivilegedContainer: false
+  allowedCapabilities:
+  - NET_BIND_SERVICE
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    type: MustRunAs
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      include.release.openshift.io/ibm-cloud-managed: "true"
+      include.release.openshift.io/self-managed-high-availability: "true"
+      include.release.openshift.io/single-node-developer: "true"
+      kubernetes.io/description: restricted-v2 denies access to all host features
+        and requires pods to be run with a UID, and SELinux context that are allocated
+        to the namespace. This is the most restrictive SCC and it is used by default
+        for authenticated users. On top of the legacy 'restricted' SCC, it also requires
+        to drop ALL capabilities and does not allow privilege escalation binaries.
+        It will also default the seccomp profile to runtime/default if unset, otherwise
+        this seccomp profile is required.
+    creationTimestamp: "2023-03-27T19:46:53Z"
+    generation: 1
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:allowedCapabilities: {}
+        f:defaultAddCapabilities: {}
+        f:fsGroup:
+          .: {}
+          f:type: {}
+        f:groups: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:include.release.openshift.io/ibm-cloud-managed: {}
+            f:include.release.openshift.io/self-managed-high-availability: {}
+            f:include.release.openshift.io/single-node-developer: {}
+            f:kubernetes.io/description: {}
+          f:ownerReferences:
+            .: {}
+            k:{"uid":"3a3cf2a3-760c-4052-b148-8664342dcd52"}: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:seccompProfiles: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: cluster-version-operator
+      operation: Update
+      time: "2023-03-27T19:46:53Z"
+    name: restricted-v2
+    ownerReferences:
+    - apiVersion: config.openshift.io/v1
+      kind: ClusterVersion
+      name: version
+      uid: 3a3cf2a3-760c-4052-b148-8664342dcd52
+    resourceVersion: "1182744220"
+    uid: 9ec55dd5-7bf2-4fff-9b1a-a71ab0848c23
+  priority: null
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - ALL
+  runAsUser:
+    type: MustRunAsRange
+  seLinuxContext:
+    type: MustRunAs
+  seccompProfiles:
+  - runtime/default
+  supplementalGroups:
+    type: RunAsAny
+  users: []
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+- allowHostDirVolumePlugin: false
+  allowHostIPC: false
+  allowHostNetwork: false
+  allowHostPID: false
+  allowHostPorts: false
+  allowPrivilegeEscalation: true
+  allowPrivilegedContainer: false
+  allowedCapabilities: null
+  apiVersion: security.openshift.io/v1
+  defaultAddCapabilities: null
+  fsGroup:
+    ranges:
+    - max: 1400
+      min: 1000
+    type: RunAsAny
+  groups: []
+  kind: SecurityContextConstraints
+  metadata:
+    annotations:
+      kubernetes.io/description: SCC used by TSB ControlPlane components
+      platform.tsb.tetrate.io/application: istio-operator
+      platform.tsb.tetrate.io/component: istio
+      platform.tsb.tetrate.io/plane: control
+      tsb.tetrate.io/contentHash: 0c005034e16e4e1a
+    creationTimestamp: "2023-03-18T01:11:58Z"
+    generation: 2
+    managedFields:
+    - apiVersion: security.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:allowHostDirVolumePlugin: {}
+        f:allowHostIPC: {}
+        f:allowHostNetwork: {}
+        f:allowHostPID: {}
+        f:allowHostPorts: {}
+        f:allowPrivilegeEscalation: {}
+        f:allowPrivilegedContainer: {}
+        f:fsGroup:
+          .: {}
+          f:ranges: {}
+          f:type: {}
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:kubernetes.io/description: {}
+            f:platform.tsb.tetrate.io/application: {}
+            f:platform.tsb.tetrate.io/component: {}
+            f:platform.tsb.tetrate.io/plane: {}
+            f:tsb.tetrate.io/contentHash: {}
+        f:priority: {}
+        f:readOnlyRootFilesystem: {}
+        f:requiredDropCapabilities: {}
+        f:runAsUser:
+          .: {}
+          f:type: {}
+          f:uidRangeMax: {}
+          f:uidRangeMin: {}
+        f:seLinuxContext:
+          .: {}
+          f:type: {}
+        f:supplementalGroups:
+          .: {}
+          f:type: {}
+        f:users: {}
+        f:volumes: {}
+      manager: tsboperator-server
+      operation: Update
+      time: "2023-08-29T03:57:12Z"
+    name: tsb-controlplane
+    resourceVersion: "1578541434"
+    uid: 2574b248-c7d0-4bd7-9af1-022c4f815ece
+  priority: 100
+  readOnlyRootFilesystem: false
+  requiredDropCapabilities:
+  - MKNOD
+  runAsUser:
+    type: RunAsAny
+    uidRangeMax: 1400
+    uidRangeMin: 1000
+  seLinuxContext:
+    type: MustRunAs
+  supplementalGroups:
+    type: RunAsAny
+  users:
+  - system:serviceaccount:istio-system:xcp-edge
+  - system:serviceaccount:istio-system:istiod
+  - system:serviceaccount:istio-system:istio-system-oap
+  - system:serviceaccount:istio-system:vmgateway-service-account
+  - system:serviceaccount:kube-system:istio-cni
+  volumes:
+  - configMap
+  - downwardAPI
+  - emptyDir
+  - persistentVolumeClaim
+  - projected
+  - secret
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

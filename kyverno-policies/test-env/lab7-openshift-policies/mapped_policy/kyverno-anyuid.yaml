@@ -1,54 +1,58 @@
-# Need to add allowHostDirVolumePlugin, allowPrivilegedContainer
-
-
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: hostaccess
+  name: anyuid
   annotations:
     policies.kyverno.io/description: >-
-      hostaccess Policy - Allow hostaccess privilege.      
+      anyuid Policy - Allow privilege escalation.      
 spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: scc-hostaccess-bad-pod
+    - name: scc-anyuid-bad-pod
       match:
         any:
         - resources:
             kinds:
               - Pod
-            namespaces:
-              - openshift-cluster-version
-            names:
-              - cluster-version-operator-6869f6c45d-q7qjr
       validate:
         message: >-
-          This is hostaccess policy  - provide access at host level.
+          This is anyuid policy  - restricting access at host level, allow privilege escalation and restricting volume types.        
         pattern:
           spec:
-            securityContext:
-              runAsUser: "?*"
-              fsGroup: "?*"
-              supplementalGroups: "?*"
             =(hostNetwork): false
             =(hostIPC): false
             =(hostPID): false 
             =(ephemeralContainers):
                 securityContext:
                   allowPrivilegeEscalation: true
+                  privileged: false
+                  runAsNonRoot: "true"
+                  capabilities:
+                    drop:
+                      - all
                   readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             =(initContainers):
                 securityContext:
                   allowPrivilegeEscalation: true
+                  privileged: false
+                  runAsNonRoot: "true"
+                  capabilities:
+                    drop:
+                      - all
                   readOnlyRootFilesystem: false
                   seLinuxOptions:
                     level: "?*"
             containers:
             - securityContext:
                 allowPrivilegeEscalation: true
+                privileged: false
+                runAsNonRoot: "true"
+                capabilities:
+                  drop:
+                    - all
                 readOnlyRootFilesystem: false
                 seLinuxOptions:
                   level: "?*"
@@ -77,10 +81,11 @@ spec:
               - configMap
               - downwardAPI
               - emptyDir
-              - hostPath
               - persistentVolumeClaim
               - projected
               - secret
+              - csi
+              - ephemeral
               - ''
     - name: host-ports-none
       match:
@@ -104,35 +109,3 @@ spec:
             containers:
               - =(ports):
                   - =(hostPort): 0
-    - name: required-drop-capabilities
-      match:
-        any:
-        - resources:
-            kinds:
-              - Pod
-      preconditions:
-        all:
-        - key: "{{ request.operation || 'BACKGROUND' }}"
-          operator: NotEquals
-          value: DELETE
-      validate:
-        message: >-
-                    Any container needs to have KILL, MKNOD, SETUID, SETGID capabilities.
-        foreach:
-          - list: request.object.spec.[ephemeralContainers, initContainers, containers][]
-            deny:
-              conditions:
-                any:
-                - key: KILL
-                  operator: AnyNotIn
-                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
-                - key: MKNOD
-                  operator: AnyNotIn
-                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
-                - key: SETUID
-                  operator: AnyNotIn
-                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
-                - key: SETGID
-                  operator: AnyNotIn
-                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
-
