@@ -12,7 +12,7 @@ spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: scc-hostaccess-bad-pod
+    - name: securityContext-hostlevelvalidation
       match:
         any:
         - resources:

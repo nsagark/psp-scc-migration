@@ -85,12 +85,14 @@ spec:
             - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
               operator: AnyNotIn
               value:
+              - name
               - configMap
               - downwardAPI
               - emptyDir
               - persistentVolumeClaim
               - projected
               - secret
+              - hostPath
               - ''
     - name: ensure-hostpaths-readonly
       match:

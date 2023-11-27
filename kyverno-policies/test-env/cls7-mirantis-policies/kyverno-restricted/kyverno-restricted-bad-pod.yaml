@@ -1,22 +1,20 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: scc-kyverno-restrcitedv2-badpod
+  name: restricted-bad-pod
 spec:
-  serviceAccountName: badpod
   hostNetwork: true
   hostPID: true 
   hostIPC: true
   securityContext:
     runAsUser: 1000
     fsGroup: 1001
-    runAsNonRoot: true
     supplementalGroups: [2002]
   volumes:
   - name: config-vol
-    hostPath: 
-      path: /var/lib/docker/volumes/*certs
-      type: Directory
+    hostPath:
+      path: /dev/test
+      type: DirectoryOrCreate
   containers:
   - name: container01
     image: busybox
@@ -25,20 +23,16 @@ spec:
       - "3600"
     volumeMounts:
     - name: config-vol
-      mountPath: /var/lib/docker/volumes/*certs
-      readOnly: true
+      mountPath: /etc/config
+    ports: 
+    - name: test
+      hostPort: 80
+      containerPort: 80
     securityContext:
-      runAsNonRoot: true
       allowPrivilegeEscalation: true
-      readOnlyRootFilesystem: true
       privileged: true
       capabilities:
         drop:
-          - KILL
-          - MKNOD
-          - SYS_CHROOT
-          - SETUID
-          - SETGID
-          - NET_RAW 
+          - all
       seLinuxOptions:
         level: "s0:c123,c456"

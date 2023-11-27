@@ -3,16 +3,19 @@ kind: Pod
 metadata:
   name: restricted-good-pod
 spec:
-  hostNetwork: true
-  hostPID: true 
-  hostIPC: true
+  hostNetwork: false
+  hostPID: false 
+  hostIPC: false
   securityContext:
+    runAsNonRoot: true
     runAsUser: 1000
     fsGroup: 1001
     supplementalGroups: [2002]
   volumes:
   - name: config-vol
-    emptyDir: {}
+    hostPath:
+      path: /dev/null
+      type: DirectoryOrCreate
   containers:
   - name: container01
     image: busybox
@@ -21,14 +24,16 @@ spec:
       - "3600"
     volumeMounts:
     - name: config-vol
-      mountPath: /etc/config
+      mountPath: /dev/null
+      readOnly: true
     ports: 
     - name: test
       hostPort: 80
       containerPort: 80
     securityContext:
-      allowPrivilegeEscalation: "true"
-      privileged: "true"
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      privileged: false
       capabilities:
         drop:
           - all
