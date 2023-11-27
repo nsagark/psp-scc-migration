@@ -1,0 +1,25 @@
+Non-prod-scc
+
+anyuid  (already done)
+hostaccess (vikash)
+hostmount-anyuid (vikash)
+
+hostnetwork (Anudeep)
+hostnetwork-v2 (Anudeep)
+
+machine-api-termination-handler (slack)
+node-exporter (Anudeep)
+
+nonroot (vikash)
+nonroot-anyuid (vikash)
+nonroot-v2 (vikash)
+
+
+privileged  (Anudeep)
+qualys-agent-scc (Anudeep)
+
+restricted   (vikash)
+restricted-v2 (already done)
+
+tsb-controlplane (already done)
+

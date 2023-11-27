@@ -9,7 +9,7 @@ spec:
   validationFailureAction: Enforce
   background: true
   rules:
-    - name: scc-anyuid-bad-pod
+    - name: securityContext-hostlevelvalidation
       match:
         any:
         - resources:
