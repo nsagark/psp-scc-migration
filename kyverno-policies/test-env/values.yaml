@@ -4,8 +4,7 @@
 
 profile: "prod"
 
-# licenseKey: ["add_licence_key"]
-licenseKey: ouOA/Zp/0+rS5r3NejN1KwSoIcxQUFOyHDN9GD15yw61TUcJgq9d1gnfhdK4UB15IvE1tnokdfi/vKOvpZfxUbT0AzAfXJqZfXk7gZmzxDIXoCi0NITGLkX5WsUfWT0YqmNu3JdcBCr+WcW+ZpNyJasFRxidf8ub7xbS1W9Q+ezsg5pxmSDVyxZ+bs5dQF40RhsW7+qa/Z2r9/aB3Nv6dGztH4jwuwZG1lL0sHXOsFAPOaKkt2q1cPd2wBZRY2rTzBvNkUimBHn4zVuJpH+Rk4RzQuaPjZFcZvsTARHTNgNkBysHNdBMsFrOas5iHcgE4h9mHU6bjXZ7DPduCQT8hoXMMo/90GGX8kteJKTe8+mIY4waajub+1RIrkPq6+xK
+licenseKey: ["add_licence_key"]
 predeletehookimage: "ghcr.io/nirmata/hyperkube:v1.16.12"
 
 cloudPlatform: ""
