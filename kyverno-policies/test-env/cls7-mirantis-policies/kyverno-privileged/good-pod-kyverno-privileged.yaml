@@ -30,7 +30,7 @@ spec:
       readOnly: true
     securityContext:
       runAsNonRoot: false
-      allowPrivilegeEscalation: true
+      allowPrivilegeEscalation: false
       privileged: true
       capabilities:
         add:
