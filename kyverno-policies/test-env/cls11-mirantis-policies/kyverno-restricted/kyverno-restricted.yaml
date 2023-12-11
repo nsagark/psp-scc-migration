@@ -1,9 +1,9 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: restricted-access
+  name: visa-restricted
   annotations:
-    policies.kyverno.io/title: Restrict access
+    policies.kyverno.io/title: Visa Restrict Access
     policies.kyverno.io/category: Visa-Custom
     policies.kyverno.io/severity: medium
     policies.kyverno.io/subject: Pod
@@ -12,22 +12,22 @@ metadata:
     policies.kyverno.io/description: >-
       Custom Policy for restricted access deployment at Visa
 spec:
-  validationFailureAction: Enforce
+  validationFailureAction: Audit
   background: true
   rules:
     - name: securityContext-hostlevelvalidation
-      match:
+      exclude:
         any:
         - resources:
             kinds:
               - Pod
             namespaces:
-              - cluster-validation-tests 
-              - envoy-oi-system-b
-              - envoy-oi-system-m 
-              - envoy-system-b-infra-t1 
-              - envoy-system-m
-              - opera-monitor 
+              - argocd
+              - calico-system
+              - istio-*
+              - kube-system
+              - prometheus-operator
+              - tigera-*
       validate:
         message: >-
           Policy for Restricted Access.        
