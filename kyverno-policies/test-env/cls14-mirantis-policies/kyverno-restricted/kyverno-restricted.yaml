@@ -27,6 +27,11 @@ spec:
               - kube-system
               - prometheus-operator
               - tigera-*
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
       validate:
         message: >-
           Policy for Restricted Access.        
@@ -94,6 +99,17 @@ spec:
               - hostPath
               - ''
     - name: ensure-hostpaths-readonly
+      exclude:
+        any:
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - calico-system
+              - istio-*
+              - kube-system
+              - prometheus-operator
+              - tigera-*
       match:
         any:
         - resources:
@@ -123,11 +139,22 @@ spec:
                 operator: NotEquals
                 value: "{{ request.object.spec.[containers, initContainers, ephemeralContainers][].volumeMounts[?name == '{{element.name}}' && readOnly] [] | length(@) }}"
     - name: limit-hostpath-to-slash-dev-slash-null
+      exclude:
+        any:
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - calico-system
+              - istio-*
+              - kube-system
+              - prometheus-operator
+              - tigera-*
       match:
         any:
         - resources:
             kinds:
-            - Pod
+              - Pod
       preconditions:
         all:
         - key: "{{ request.object.spec.volumes[?hostPath] | length(@) }}"
