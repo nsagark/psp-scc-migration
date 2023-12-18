@@ -31,10 +31,7 @@ spec:
         message: >-
           Policy for privileged Access.        
         pattern:
-          spec:            
-            =(hostNetwork): true
-            =(hostIPC): true
-            =(hostPID): true  
+          spec:  
             =(securityContext):
               =(runAsUser): "*"
               =(runAsGroup): "*"
