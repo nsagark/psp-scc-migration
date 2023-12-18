@@ -15,7 +15,7 @@ spec:
   validationFailureAction: Audit
   background: true
   rules:
-    - name: securityContext-hostlevelvalidation
+    - name: securityContext-podlevelvalidation
       exclude:
         any:
         - resources:
@@ -34,45 +34,88 @@ spec:
               - Pod
       validate:
         message: >-
-          Policy for Restricted Access.        
+          Policy for Restricted Access.   
         pattern:
           spec:            
             =(hostNetwork): false
             =(hostIPC): false
             =(hostPID): false  
-            securityContext:
-              runAsNonRoot: true
-              fsGroup: '1-65535'
-              supplementalGroups: '1-65535'   
+            =(securityContext):
+              =(runAsUser): "*"
+              =(runAsGroup): "*"
+              =(fsGroup): "*"
+              =(supplementalGroups): "*"
+              =(runAsNonRoot): "true|false"
+              =(allowPrivilegeEscalation): "true|false"  
+              =(privileged): "true|false"
+              =(capabilities):
+                  =(drop):
+                    - all
+              =(seLinuxOptions):
+                =(level): "?*"
+    - name: securityContext-containerlevelvalidation
+      exclude:
+        any:
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - calico-system
+              - istio-*
+              - kube-system
+              - prometheus-operator
+              - tigera-*   
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      preconditions:
+        all:
+        - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
+          operator: Equals
+          value: 0
+      validate:
+        message: >-
+          Policy for privileged Access. 
+        pattern:
+          spec:   
             =(ephemeralContainers):          
-              securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
-                capabilities:
-                  drop:
-                    - all
-                seLinuxOptions:
-                  level: "?*"
+            - securityContext:
+                =(allowPrivilegeEscalation): "true|false"  
+                =(readOnlyRootFilesystem): "true|false"
+                =(privileged): "true|false"
+                =(capabilities):
+                    =(drop):
+                      - all
+                =(seLinuxOptions):
+                  =(level): "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'
             =(initContainers):          
-              securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
-                privileged: false
-                capabilities:
-                  drop:
-                    - all
-                seLinuxOptions:
-                  level: "?*"
+            - securityContext:
+                =(allowPrivilegeEscalation): "true|false"  
+                =(readOnlyRootFilesystem): "true|false"
+                =(privileged): "true|false"
+                =(capabilities):
+                    =(drop):
+                      - all
+                =(seLinuxOptions):
+                  =(level): "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'
             containers:          
             - securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
-                privileged: false
-                seLinuxOptions:
-                  level: "?*"
-                capabilities:
-                  drop:
-                    - all             
+                =(allowPrivilegeEscalation): "true|false"  
+                =(readOnlyRootFilesystem): "true|false"
+                =(privileged): "true|false"
+                =(capabilities):
+                    =(drop):
+                      - all
+                =(seLinuxOptions):
+                  =(level): "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'          
     - name: restricted-volumes
       exclude:
         any:
