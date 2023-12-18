@@ -29,9 +29,9 @@ spec:
       mountPath: /var/lib/docker/volumes/*certs
       readOnly: true
     securityContext:
-      runAsNonRoot: false
+      runAsNonRoot: true
       allowPrivilegeEscalation: false
-      privileged: true
+      privileged: false
       capabilities:
         add:
           - KILL
