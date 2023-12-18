@@ -37,9 +37,6 @@ spec:
           Policy for Restricted Access.   
         pattern:
           spec:            
-            =(hostNetwork): false
-            =(hostIPC): false
-            =(hostPID): false  
             =(securityContext):
               =(runAsUser): "*"
               =(runAsGroup): "*"
