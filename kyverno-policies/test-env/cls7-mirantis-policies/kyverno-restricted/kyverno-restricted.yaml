@@ -34,6 +34,11 @@ spec:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - cluster-validation-tests       
+              - envoy-oi-system-*
+              - envoy-system-*
+              - opera-monitor
       validate:
         message: >-
           Policy for Restricted Access.   
@@ -71,6 +76,11 @@ spec:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - cluster-validation-tests       
+              - envoy-oi-system-*
+              - envoy-system-*
+              - opera-monitor
       preconditions:
         all:
         - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
@@ -136,6 +146,11 @@ spec:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - cluster-validation-tests       
+              - envoy-oi-system-*
+              - envoy-system-*
+              - opera-monitor
       validate:
         message: >-
           Only the following types of volumes may be used: configMap, downwardAPI,
@@ -174,6 +189,11 @@ spec:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - cluster-validation-tests       
+              - envoy-oi-system-*
+              - envoy-system-*
+              - opera-monitor
       preconditions:
         all:
         - key: "{{ request.operation || 'BACKGROUND' }}"
@@ -216,6 +236,11 @@ spec:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - cluster-validation-tests       
+              - envoy-oi-system-*
+              - envoy-system-*
+              - opera-monitor
       preconditions:
         all:
         - key: "{{ request.object.spec.volumes[?hostPath] | length(@) }}"
