@@ -32,6 +32,9 @@ spec:
           Policy for privileged Access.        
         pattern:
           spec:  
+            =(hostNetwork): true
+            =(hostIPC): true
+            =(hostPID): true  
             =(securityContext):
               =(runAsUser): "*"
               =(runAsGroup): "*"
@@ -64,7 +67,7 @@ spec:
         pattern:
           spec:   
             =(ephemeralContainers):          
-            - securityContext:
+            - =(securityContext):
                 =(allowPrivilegeEscalation): "true|false"  
                 =(privileged): "true|false"
                 =(seLinuxOptions):
@@ -72,7 +75,7 @@ spec:
               =(ports): 
                - =(hostPort): '0-65535'
             =(initContainers):          
-            - securityContext:
+            - =(securityContext):
                 =(allowPrivilegeEscalation): "true|false"  
                 =(privileged): "true|false"
                 =(seLinuxOptions?):
@@ -80,7 +83,7 @@ spec:
               =(ports): 
                - =(hostPort): '0-65535'
             containers:          
-            - securityContext:
+            - =(securityContext):
                 =(allowPrivilegeEscalation): "true|false"  
                 =(privileged): "true|false"
                 =(seLinuxOptions):
