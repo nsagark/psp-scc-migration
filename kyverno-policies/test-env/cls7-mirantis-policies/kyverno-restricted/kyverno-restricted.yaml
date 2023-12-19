@@ -27,6 +27,8 @@ spec:
               - kube-system
               - prometheus-operator
               - tigera-*   
+              - nirmata-system
+              - kyverno
       match:
         any:
         - resources:
@@ -62,6 +64,8 @@ spec:
               - kube-system
               - prometheus-operator
               - tigera-*   
+              - nirmata-system
+              - kyverno
       match:
         any:
         - resources:
@@ -125,6 +129,8 @@ spec:
               - kube-system
               - prometheus-operator
               - tigera-*   
+              - nirmata-system
+              - kyverno
       match:
         any:
         - resources:
@@ -161,6 +167,8 @@ spec:
               - kube-system
               - prometheus-operator
               - tigera-*   
+              - nirmata-system
+              - kyverno 
       match:
         any:
         - resources:
@@ -201,6 +209,8 @@ spec:
               - kube-system
               - prometheus-operator
               - tigera-*   
+              - nirmata-system
+              - kyverno 
       match:
         any:
         - resources:
