@@ -102,7 +102,6 @@ spec:
               - kube-system
               - prometheus-operator
               - tigera-*
-              - Pod
       validate:
         message: >-
           Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort
