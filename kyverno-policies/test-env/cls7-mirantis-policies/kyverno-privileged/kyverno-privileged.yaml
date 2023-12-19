@@ -32,9 +32,9 @@ spec:
           Policy for privileged Access.        
         pattern:
           spec:  
-            =(hostNetwork): true
-            =(hostIPC): true
-            =(hostPID): true  
+            =(hostNetwork): "true|false" 
+            =(hostIPC): "true|false" 
+            =(hostPID): "true|false"   
             =(securityContext):
               =(runAsUser): "*"
               =(runAsGroup): "*"
@@ -95,6 +95,13 @@ spec:
         any:
         - resources:
             kinds:
+              - Pod
+            namespaces:
+              - calico-system
+              - istio-*
+              - kube-system
+              - prometheus-operator
+              - tigera-*
               - Pod
       validate:
         message: >-
