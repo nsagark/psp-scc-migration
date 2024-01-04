@@ -23,6 +23,7 @@ spec:
               - Pod
             namespaces:
               - 0018916-development-business
+              - 0018916-development-business-job
               - 0020553-development-business-job
               - 0020553-development-business
               - bookinfo-ew-front
@@ -37,6 +38,7 @@ spec:
               - infra-test-p 
               - isilon
               - istio-system 
+              - istio-gateway
               - kube-system 
               - minio-operator 
               - openwhisk
@@ -44,6 +46,8 @@ spec:
               - splunk-k8  
               - tekton-pipelines 
               - vxflexos
+              - cv-tekton-pipelines
+              - synk  
       match:
         any:
         - resources:
@@ -102,6 +106,7 @@ spec:
               - Pod
             namespaces:
               - 0018916-development-business
+              - 0018916-development-business-job
               - 0020553-development-business-job
               - 0020553-development-business
               - bookinfo-ew-front
@@ -116,6 +121,7 @@ spec:
               - infra-test-p 
               - isilon
               - istio-system 
+              - istio-gateway
               - kube-system 
               - minio-operator 
               - openwhisk
@@ -123,6 +129,8 @@ spec:
               - splunk-k8  
               - tekton-pipelines 
               - vxflexos
+              - cv-tekton-pipelines
+              - synk  
       match:
         any:
         - resources:
@@ -209,6 +217,7 @@ spec:
               - Pod
             namespaces:
               - 0018916-development-business
+              - 0018916-development-business-job
               - 0020553-development-business-job
               - 0020553-development-business
               - bookinfo-ew-front
@@ -223,6 +232,7 @@ spec:
               - infra-test-p 
               - isilon
               - istio-system 
+              - istio-gateway
               - kube-system 
               - minio-operator 
               - openwhisk
@@ -230,6 +240,8 @@ spec:
               - splunk-k8  
               - tekton-pipelines 
               - vxflexos
+              - cv-tekton-pipelines
+              - synk  
       match:
         any:
         - resources:
@@ -289,6 +301,7 @@ spec:
               - Pod
             namespaces:
               - 0018916-development-business
+              - 0018916-development-business-job
               - 0020553-development-business-job
               - 0020553-development-business
               - bookinfo-ew-front
@@ -303,6 +316,7 @@ spec:
               - infra-test-p 
               - isilon
               - istio-system 
+              - istio-gateway
               - kube-system 
               - minio-operator 
               - openwhisk
@@ -310,6 +324,8 @@ spec:
               - splunk-k8  
               - tekton-pipelines 
               - vxflexos
+              - cv-tekton-pipelines
+              - synk  
       match:
         any:
         - resources:
@@ -373,6 +389,7 @@ spec:
               - Pod
             namespaces:
               - 0018916-development-business
+              - 0018916-development-business-job
               - 0020553-development-business-job
               - 0020553-development-business
               - bookinfo-ew-front
@@ -387,6 +404,7 @@ spec:
               - infra-test-p 
               - isilon
               - istio-system 
+              - istio-gateway
               - kube-system 
               - minio-operator 
               - openwhisk
@@ -394,6 +412,8 @@ spec:
               - splunk-k8  
               - tekton-pipelines 
               - vxflexos
+              - cv-tekton-pipelines
+              - synk  
       match:
         any:
         - resources:
