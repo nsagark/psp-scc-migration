@@ -21,9 +21,6 @@ spec:
     command:
       - sleep
       - "3600"
-    ports:
-    - hostPort: 80
-      containerPort: 80
     volumeMounts:
     - name: config-vol
       mountPath: /var/lib/docker/volumes/*certs

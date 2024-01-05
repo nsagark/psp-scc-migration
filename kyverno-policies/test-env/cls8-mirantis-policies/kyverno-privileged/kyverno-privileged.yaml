@@ -3,11 +3,11 @@ kind: ClusterPolicy
 metadata:
   name: visa-privileged
   annotations:
-    policies.kyverno.io/title: visa-privileged
+    policies.kyverno.io/title: visaprivileged
     policies.kyverno.io/category: Visa-Custom
     policies.kyverno.io/severity: medium
     policies.kyverno.io/subject: Pod
-    kyverno.io/kyverno-version: 1.9.2
+    kyverno.io/kyverno-version: 1.10.3
     kyverno.io/kubernetes-version: "1.23-1.26"
     policies.kyverno.io/description: >-
       Custom Policy for privileged access deployment at Visa
@@ -15,7 +15,7 @@ spec:
   validationFailureAction: Audit
   background: true
   rules:
-    - name: securityContext-hostlevelvalidation
+    - name: securityContext-podlevelvalidation
       match:
         any:
         - resources:
@@ -24,44 +24,72 @@ spec:
             namespaces:
               - calico-system
               - cert-manager
+              - infra-monitoring
               - istio-gateway
               - kube-system
-              - prometheus-operator
               - tigera-*
       validate:
         message: >-
           Policy for privileged Access.        
         pattern:
-          spec:            
-            =(hostNetwork): true
-            =(hostIPC): true
-            =(hostPID): true  
-            securityContext:
-              runAsUser: "*"
-              fsGroup: "*"
-              supplementalGroups: "*"  
+          spec:  
+            =(hostNetwork): "true|false" 
+            =(hostIPC): "true|false" 
+            =(hostPID): "true|false"   
+            =(securityContext):
+              =(runAsUser): "*"
+              =(runAsGroup): "*"
+              =(fsGroup): "*"
+              =(supplementalGroups): "*"
+              =(allowPrivilegeEscalation): "true|false"  
+              =(privileged): "true|false"
+              =(seLinuxOptions):
+                =(level): "?*"
+    - name: securityContext-containerlevelvalidation
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - calico-system
+              - cert-manager
+              - infra-monitoring
+              - istio-gateway
+              - kube-system
+              - tigera-*
+      preconditions:
+        all:
+        - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
+          operator: Equals
+          value: 0
+      validate:
+        message: >-
+          Policy for privileged Access. 
+        pattern:
+          spec:   
             =(ephemeralContainers):          
-              securityContext:
-                allowPrivilegeEscalation: true
-                privileged: true
-                seLinuxOptions:
-                  level: "?*"
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"  
+                =(privileged): "true|false"
+                =(seLinuxOptions):
+                  =(level): "?*"
               =(ports): 
                - =(hostPort): '0-65535'
             =(initContainers):          
-              securityContext:
-                allowPrivilegeEscalation: true
-                privileged: true
-                seLinuxOptions:
-                  level: "?*"
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"  
+                =(privileged): "true|false"
+                =(seLinuxOptions?):
+                  =(level): "?*"
               =(ports): 
                - =(hostPort): '0-65535'
             containers:          
-            - securityContext:
-                allowPrivilegeEscalation: true
-                privileged: true
-                seLinuxOptions:
-                  level: "?*"          
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"  
+                =(privileged): "true|false"
+                =(seLinuxOptions):
+                  =(level): "?*"          
               =(ports): 
                - =(hostPort): '0-65535'
     - name: host-ports-restriction
@@ -70,6 +98,13 @@ spec:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - calico-system
+              - cert-manager
+              - infra-monitoring
+              - istio-gateway
+              - kube-system
+              - tigera-*
       validate:
         message: >-
           Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort
@@ -85,5 +120,4 @@ spec:
                   - =(hostPort): "0-65535"
             containers:
               - =(ports):
-                  - =(hostPort): "0-65535"               
-    
+                  - =(hostPort): "0-65535"
