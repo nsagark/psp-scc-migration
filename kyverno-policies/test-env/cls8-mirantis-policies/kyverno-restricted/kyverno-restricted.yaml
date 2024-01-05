@@ -36,6 +36,7 @@ spec:
             namespaces:
               - istio-system
               - tsb
+              - envoy-oi-system-*
       validate:
         message: >-
           Policy for Restricted Access.   
@@ -75,6 +76,7 @@ spec:
             namespaces:
               - istio-system
               - tsb
+              - envoy-oi-system-*
       preconditions:
         all:
         - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
@@ -142,6 +144,7 @@ spec:
             namespaces:
               - istio-system
               - tsb
+              - envoy-oi-system-*
       validate:
         message: >-
           Only the following types of volumes may be used: configMap, downwardAPI,
@@ -182,6 +185,7 @@ spec:
             namespaces:
               - istio-system
               - tsb
+              - envoy-oi-system-*
       preconditions:
         all:
         - key: "{{ request.operation || 'BACKGROUND' }}"
@@ -226,6 +230,7 @@ spec:
             namespaces:
               - istio-system
               - tsb
+              - envoy-oi-system-*
       preconditions:
         all:
         - key: "{{ request.object.spec.volumes[?hostPath] | length(@) }}"
