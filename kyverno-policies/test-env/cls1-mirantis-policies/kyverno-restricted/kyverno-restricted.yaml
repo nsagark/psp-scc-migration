@@ -62,6 +62,7 @@ spec:
               - 0034380-development-business
               - argo-rollouts 
               - argocd-cv 
+              - argo-events 
               - eastwest
               - envoy-* 
               - helloworld-*
@@ -145,6 +146,7 @@ spec:
               - 0034380-development-business
               - argo-rollouts 
               - argocd-cv 
+              - argo-events
               - eastwest
               - envoy-* 
               - helloworld-*
@@ -256,6 +258,7 @@ spec:
               - 0034380-development-business
               - argo-rollouts 
               - argocd-cv 
+              - argo-events
               - eastwest
               - envoy-* 
               - helloworld-*
@@ -340,6 +343,7 @@ spec:
               - 0034380-development-business
               - argo-rollouts 
               - argocd-cv 
+              - argo-events
               - eastwest
               - envoy-* 
               - helloworld-*
@@ -428,6 +432,7 @@ spec:
               - 0034380-development-business
               - argo-rollouts 
               - argocd-cv 
+              - argo-events
               - eastwest
               - envoy-* 
               - helloworld-*
