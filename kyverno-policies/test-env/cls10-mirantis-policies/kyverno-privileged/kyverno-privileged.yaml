@@ -28,6 +28,8 @@ spec:
               - msr
               - prometheus-operator
               - tigera-*
+              - cluster-discovery
+              - isilon
       validate:
         message: >-
           Policy for privileged Access.        
@@ -58,6 +60,8 @@ spec:
               - msr
               - prometheus-operator
               - tigera-*
+              - cluster-discovery
+              - isilon
       preconditions:
         all:
         - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
@@ -105,6 +109,8 @@ spec:
               - msr
               - prometheus-operator
               - tigera-*
+              - cluster-discovery
+              - isilon
       validate:
         message: >-
           Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort

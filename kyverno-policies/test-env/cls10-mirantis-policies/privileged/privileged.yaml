@@ -25,6 +25,10 @@ spec:
               - 0070081-k8ssandra2
               - kyverno
               - msr
+              - node-feature-discovery 
+              - splunk-k8
+              - tigera-packetcapture
+              - vxflexos
       validate:
         message: >-
           Policy for privileged Access.        
@@ -52,6 +56,10 @@ spec:
               - 0070081-k8ssandra2
               - kyverno
               - msr
+              - node-feature-discovery 
+              - splunk-k8
+              - tigera-packetcapture
+              - vxflexos              
       preconditions:
         all:
         - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
@@ -96,6 +104,10 @@ spec:
               - 0070081-k8ssandra2
               - kyverno
               - msr
+              - node-feature-discovery 
+              - splunk-k8
+              - tigera-packetcapture
+              - vxflexos
       validate:
         message: >-
           Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort
