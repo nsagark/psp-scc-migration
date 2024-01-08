@@ -1,9 +1,9 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: visa-privileged
+  name: privileged
   annotations:
-    policies.kyverno.io/title: visaprivileged
+    policies.kyverno.io/title: privileged
     policies.kyverno.io/category: Visa-Custom
     policies.kyverno.io/severity: medium
     policies.kyverno.io/subject: Pod
@@ -22,35 +22,10 @@ spec:
             kinds:
               - Pod
             namespaces:
-              - 0018916-development-business
-              - 0018916-development-business-job
-              - 0020553-development-business-job
-              - 0020553-development-business
-              - bookinfo-ew-front
-              - bookinfo-front
-              - bookinfo
-              - cert-manager
-              - ddpdev-development-perimeter
-              - dfmdev-development-business
-              - infra-monitoring
-              - infra-test-b
-              - infra-test-m  
-              - infra-test-p 
-              - isilon
-              - istio-system 
-              - istio-gateway 
-              - kube-system 
-              - minio-operator 
-              - openwhisk
-              - prometheus-operator 
-              - splunk-k8  
-              - tekton-pipelines 
-              - vxflexos
-              - kuberhealthy 
-              - node-problem-detector
-              - vxflexos-controller
-              - vxflexos-node 
-              - xcp-operator-edge
+              - kube-system
+              - vmp
+              - cluster-backup
+              - default
       validate:
         message: >-
           Policy for privileged Access.        
@@ -75,35 +50,10 @@ spec:
             kinds:
               - Pod
             namespaces:
-              - 0018916-development-business
-              - 0018916-development-business-job
-              - 0020553-development-business-job
-              - 0020553-development-business
-              - bookinfo-ew-front
-              - bookinfo-front
-              - bookinfo
-              - cert-manager
-              - ddpdev-development-perimeter
-              - dfmdev-development-business
-              - infra-monitoring
-              - infra-test-b
-              - infra-test-m  
-              - infra-test-p 
-              - isilon
-              - istio-system 
-              - istio-gateway 
-              - kube-system 
-              - minio-operator 
-              - openwhisk
-              - prometheus-operator 
-              - splunk-k8  
-              - tekton-pipelines 
-              - vxflexos
-              - kuberhealthy 
-              - node-problem-detector
-              - vxflexos-controller
-              - vxflexos-node 
-              - xcp-operator-edge
+              - kube-system
+              - vmp
+              - cluster-backup
+              - default             
       preconditions:
         all:
         - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
@@ -145,35 +95,10 @@ spec:
             kinds:
               - Pod
             namespaces:
-              - 0018916-development-business
-              - 0018916-development-business-job
-              - 0020553-development-business-job
-              - 0020553-development-business
-              - bookinfo-ew-front
-              - bookinfo-front
-              - bookinfo
-              - cert-manager
-              - ddpdev-development-perimeter
-              - dfmdev-development-business
-              - infra-monitoring
-              - infra-test-b
-              - infra-test-m  
-              - infra-test-p 
-              - isilon
-              - istio-system 
-              - istio-gateway 
-              - kube-system 
-              - minio-operator 
-              - openwhisk
-              - prometheus-operator 
-              - splunk-k8  
-              - tekton-pipelines 
-              - vxflexos
-              - kuberhealthy 
-              - node-problem-detector
-              - vxflexos-controller
-              - vxflexos-node 
-              - xcp-operator-edge
+              - kube-system
+              - vmp
+              - cluster-backup
+              - default
       validate:
         message: >-
           Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort
