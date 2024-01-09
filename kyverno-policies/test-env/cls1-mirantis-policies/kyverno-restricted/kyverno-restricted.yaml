@@ -47,7 +47,12 @@ spec:
               - tekton-pipelines 
               - vxflexos
               - cv-tekton-pipelines
-              - synk  
+              - synk
+              - kuberhealthy 
+              - node-problem-detector
+              - vmp
+              - default
+              - cluster-backup 
       match:
         any:
         - resources:
@@ -132,6 +137,11 @@ spec:
               - vxflexos
               - cv-tekton-pipelines
               - synk  
+              - kuberhealthy 
+              - node-problem-detector
+              - vmp
+              - default
+              - cluster-backup
       match:
         any:
         - resources:
@@ -244,6 +254,11 @@ spec:
               - vxflexos
               - cv-tekton-pipelines
               - synk  
+              - kuberhealthy 
+              - node-problem-detector
+              - vmp
+              - default
+              - cluster-backup
       match:
         any:
         - resources:
@@ -329,6 +344,11 @@ spec:
               - vxflexos
               - cv-tekton-pipelines
               - synk  
+              - kuberhealthy 
+              - node-problem-detector
+              - vmp
+              - default
+              - cluster-backup           
       match:
         any:
         - resources:
@@ -418,6 +438,11 @@ spec:
               - vxflexos
               - cv-tekton-pipelines
               - synk  
+              - kuberhealthy 
+              - node-problem-detector
+              - vmp
+              - default
+              - cluster-backup
       match:
         any:
         - resources:

@@ -22,7 +22,7 @@ spec:
             kinds:
               - Pod
             namespaces:
-              - nirmata-kyverno-operator-5754b644fb-*
+              - kyverno
               - nirmata-system
       validate:
         message: >-
@@ -66,7 +66,7 @@ spec:
             kinds:
               - Pod
             namespaces:
-              - nirmata-kyverno-operator-5754b644fb-*
+              - kyverno
               - nirmata-system
       validate:
         message: >-
@@ -92,7 +92,7 @@ spec:
             kinds:
               - Pod
             namespaces:
-              - nirmata-kyverno-operator-5754b644fb-*
+              - kyverno
               - nirmata-system
       validate:
         message: >-
