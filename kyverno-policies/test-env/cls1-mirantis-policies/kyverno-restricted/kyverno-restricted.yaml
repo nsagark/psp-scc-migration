@@ -95,12 +95,11 @@ spec:
             securityContext:              
               fsGroup: '1-65535'			  
               supplementalGroups: '1-65535'
-              runAsUser: '1-65535'
-              #seLinuxOptions:
-              #  level: "?*"	  			   
+              =(runAsUser): '1-65535' 			   
             containers:
             - =(securityContext):
                 =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'
                 =(readOnlyRootFilesystem): "true"
                 =(capabilities):
                     =(drop):
@@ -110,6 +109,7 @@ spec:
             =(initContainers):
             - =(securityContext):
                 =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'
                 =(readOnlyRootFilesystem): "true"
                 =(capabilities):
                     =(drop):
@@ -119,6 +119,7 @@ spec:
             =(ephemeralContainers):
             - =(securityContext):
                 =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'
                 =(readOnlyRootFilesystem): "true"
                 =(capabilities):
                     =(drop):
