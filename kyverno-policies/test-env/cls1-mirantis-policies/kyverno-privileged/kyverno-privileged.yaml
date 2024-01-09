@@ -48,9 +48,6 @@ spec:
               - vxflexos
               - kuberhealthy 
               - node-problem-detector
-              - vxflexos-controller
-              - vxflexos-node 
-              - xcp-operator-edge
       validate:
         message: >-
           Policy for privileged Access.        
@@ -101,9 +98,6 @@ spec:
               - vxflexos
               - kuberhealthy 
               - node-problem-detector
-              - vxflexos-controller
-              - vxflexos-node 
-              - xcp-operator-edge
       preconditions:
         all:
         - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
@@ -171,9 +165,6 @@ spec:
               - vxflexos
               - kuberhealthy 
               - node-problem-detector
-              - vxflexos-controller
-              - vxflexos-node 
-              - xcp-operator-edge
       validate:
         message: >-
           Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort
