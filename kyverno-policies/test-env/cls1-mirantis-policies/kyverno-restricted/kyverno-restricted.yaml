@@ -38,7 +38,7 @@ spec:
               - infra-test-p 
               - isilon
               - istio-system 
-              - istio-gateway
+              - istio-gateway 
               - kube-system 
               - minio-operator 
               - openwhisk
@@ -46,6 +46,11 @@ spec:
               - splunk-k8  
               - tekton-pipelines 
               - vxflexos
+              - kuberhealthy 
+              - node-problem-detector
+              - vmp
+              - cluster-backup
+              - default
               - cv-tekton-pipelines
               - synk  
       match:
@@ -83,134 +88,75 @@ spec:
               - vddev-development-business 
       validate:
         message: >-
-          Policy for Restricted Access.   
-        pattern:
-          spec:            
-            =(securityContext):
-              =(runAsUser): "*"
-              =(runAsGroup): "*"
-              =(fsGroup): "*"
-              =(supplementalGroups): "*"
-              =(runAsNonRoot): "true|false"
-              =(allowPrivilegeEscalation): "true|false"  
-              =(privileged): "true|false"
-              =(capabilities):
-                  =(drop):
-                    - all
-              =(seLinuxOptions):
-                =(level): "?*"
-    - name: securityContext-containerlevelvalidation
-      exclude:
-        any:
-        - resources:
-            kinds:
-              - Pod
-            namespaces:
-              - 0018916-development-business
-              - 0018916-development-business-job
-              - 0020553-development-business-job
-              - 0020553-development-business
-              - bookinfo-ew-front
-              - bookinfo-front
-              - bookinfo
-              - cert-manager
-              - ddpdev-development-perimeter
-              - dfmdev-development-business
-              - infra-monitoring
-              - infra-test-b
-              - infra-test-m  
-              - infra-test-p 
-              - isilon
-              - istio-system 
-              - istio-gateway
-              - kube-system 
-              - minio-operator 
-              - openwhisk
-              - prometheus-operator 
-              - splunk-k8  
-              - tekton-pipelines 
-              - vxflexos
-              - cv-tekton-pipelines
-              - synk  
-      match:
-        any:
-        - resources:
-            kinds:
-              - Pod
-            namespaces:
-              - 0018768-development-business
-              - 0018916-development-perimeter      
-              - 0018916-production-business
-              - 0020553-development-perimeter
-              - 0020553-production-business
-              - 0034380-development-business
-              - argo-rollouts 
-              - argocd-cv 
-              - argo-events
-              - eastwest
-              - envoy-* 
-              - helloworld-*
-              - infra-test-oi-system-*
-              - infra-test-system-*
-              - opera-monitor
-              - otel
-              - regressiontestalias02242022-development-business
-              - rg21dec2021-development-business
-              - sealed-secrets
-              - sh10july2023-development-business
-              - sh17jan2023-development-business 
-              - sh18apr2022-development-business
-              - sh20dec2022-development-business
-              - sh3oct2023-development-business
-              - supbtest-development-perimeter
-              - tltsept281155-development-business
-              - vddev-development-business 
-      preconditions:
-        all:
-        - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
-          operator: Equals
-          value: 0
-      validate:
-        message: >-
-          Policy for privileged Access. 
-        pattern:
-          spec:   
-            =(ephemeralContainers):          
+          Policy for Restricted Access. 
+        anyPattern:
+      # spec.securityContext.runAsNonRoot must be set to true. If containers and/or initContainers exist which declare a securityContext field, those must have runAsNonRoot also set to true.
+        - spec:
+            securityContext:              
+              fsGroup: '1-65535'			  
+              supplementalGroups: '1-65535'
+              runAsUser: '1-65535'
+              #seLinuxOptions:
+              #  level: "?*"	  			   
+            containers:
             - =(securityContext):
-                =(allowPrivilegeEscalation): "true|false"  
-                =(readOnlyRootFilesystem): "true|false"
-                =(privileged): "true|false"
+                =(allowPrivilegeEscalation): "false"
+                =(readOnlyRootFilesystem): "true"
                 =(capabilities):
                     =(drop):
-                      - all
+                      - all			
                 =(seLinuxOptions):
-                  =(level): "?*"
-              =(ports): 
-               - =(hostPort): '0-65535'
-            =(initContainers):          
+                  level: "?*"
+            =(initContainers):
             - =(securityContext):
-                =(allowPrivilegeEscalation): "true|false"  
-                =(readOnlyRootFilesystem): "true|false"
-                =(privileged): "true|false"
+                =(allowPrivilegeEscalation): "false"
+                =(readOnlyRootFilesystem): "true"
                 =(capabilities):
                     =(drop):
-                      - all
+                      - all			
                 =(seLinuxOptions):
-                  =(level): "?*"
-              =(ports): 
-               - =(hostPort): '0-65535'
-            containers:          
+                  level: "?*"
+            =(ephemeralContainers):
             - =(securityContext):
-                =(allowPrivilegeEscalation): "true|false"  
-                =(readOnlyRootFilesystem): "true|false"
-                =(privileged): "true|false"
+                =(allowPrivilegeEscalation): "false"
+                =(readOnlyRootFilesystem): "true"
                 =(capabilities):
                     =(drop):
-                      - all
+                      - all			
                 =(seLinuxOptions):
-                  =(level): "?*"
-              =(ports): 
-               - =(hostPort): '0-65535'          
+                  level: "?*"				
+      # All containers and initContainers must define (not optional) runAsNonRoot=true.
+        - spec:
+            containers:
+            - securityContext:                
+                runAsUser: '1-65535'
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: 
+                    - all 
+                seLinuxOptions:
+                  level: "?*"
+            =(initContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "false"
+                =(readOnlyRootFilesystem): "true"
+                =(runAsUser): '1-65535'
+                =(capabilities):
+                    =(drop):
+                      - all			
+                =(seLinuxOptions):
+                  level: "?*"
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "false"
+                =(readOnlyRootFilesystem): "true"
+                =(runAsUser): '1-65535'
+                =(capabilities):
+                    =(drop):
+                      - all			
+                =(seLinuxOptions):
+                  level: "?*"							       
     - name: restricted-volumes
       exclude:
         any:
@@ -234,7 +180,7 @@ spec:
               - infra-test-p 
               - isilon
               - istio-system 
-              - istio-gateway
+              - istio-gateway 
               - kube-system 
               - minio-operator 
               - openwhisk
@@ -242,6 +188,11 @@ spec:
               - splunk-k8  
               - tekton-pipelines 
               - vxflexos
+              - kuberhealthy 
+              - node-problem-detector
+              - vmp
+              - cluster-backup
+              - default
               - cv-tekton-pipelines
               - synk  
       match:
@@ -319,7 +270,7 @@ spec:
               - infra-test-p 
               - isilon
               - istio-system 
-              - istio-gateway
+              - istio-gateway 
               - kube-system 
               - minio-operator 
               - openwhisk
@@ -327,6 +278,11 @@ spec:
               - splunk-k8  
               - tekton-pipelines 
               - vxflexos
+              - kuberhealthy 
+              - node-problem-detector
+              - vmp
+              - cluster-backup
+              - default
               - cv-tekton-pipelines
               - synk  
       match:
@@ -408,7 +364,7 @@ spec:
               - infra-test-p 
               - isilon
               - istio-system 
-              - istio-gateway
+              - istio-gateway 
               - kube-system 
               - minio-operator 
               - openwhisk
@@ -416,6 +372,11 @@ spec:
               - splunk-k8  
               - tekton-pipelines 
               - vxflexos
+              - kuberhealthy 
+              - node-problem-detector
+              - vmp
+              - cluster-backup
+              - default
               - cv-tekton-pipelines
               - synk  
       match:
