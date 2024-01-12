@@ -89,4 +89,3 @@ spec:
                   level: "?*"				
               =(ports): 
                - =(hostPort): '0-65535'				
-
