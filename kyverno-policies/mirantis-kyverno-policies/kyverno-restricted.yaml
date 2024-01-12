@@ -78,6 +78,7 @@ spec:
             - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
               operator: AnyNotIn
               value:
+              - name
               - configMap
               - downwardAPI
               - emptyDir

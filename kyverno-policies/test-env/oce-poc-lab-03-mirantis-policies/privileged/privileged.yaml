@@ -22,10 +22,31 @@ spec:
             kinds:
               - Pod
             namespaces:
-              - kube-system
-              - vmp
-              - cluster-backup
-              - default
+              - 0070081-k8ssandra1
+              - argo-rollouts
+              - central
+              - cert-manager 
+              - cluster-validation-tests
+              - deekulka
+              - envoy-*  
+              - extrahop 
+              - infra-test-*
+              - istio-gateway
+              - keptn-lifecycle-toolkit-system 
+              - kube-system  
+              - mysql-*
+              - nbu-*
+              - nosql-cass1 
+              - opera-monitor
+              - otel
+              - portworx
+              - prometheus-operator 
+              - tsb 
+              - vxflexos
+              - aqua
+              - node-feature-discovery 
+              - splunk-k8
+              - vks-dashboard
       validate:
         message: >-
           Policy for privileged Access.        
@@ -89,3 +110,4 @@ spec:
                   level: "?*"				
               =(ports): 
                - =(hostPort): '0-65535'				
+

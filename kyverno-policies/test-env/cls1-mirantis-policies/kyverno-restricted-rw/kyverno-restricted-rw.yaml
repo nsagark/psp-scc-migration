@@ -27,25 +27,52 @@ spec:
       validate:
         message: >-
           Policy for RW Restricted Access.        
-        pattern:
-          spec:            
+        anyPattern:
+      # spec.securityContext.runAsNonRoot must be set to true. If containers and/or initContainers exist which declare a securityContext field, those must have runAsNonRoot also set to true.
+        - spec:
             securityContext:
               runAsNonRoot: true
               fsGroup: '1-65535'
-              supplementalGroups: "?*"   
-            =(ephemeralContainers):          
-              securityContext:
-                allowPrivilegeEscalation: false
+              supplementalGroups: "?*"
+              runAsUser: '1-65535'
+              #seLinuxOptions:
+              #  level: "?*"
+            containers:
+            - =(securityContext):
+                =(runAsNonRoot): true
+                =(runAsUser): '1-65535'
                 seLinuxOptions:
                   level: "?*"
-            =(initContainers):          
-              securityContext:
-                allowPrivilegeEscalation: false
-                seLinuxOptions:
+            =(initContainers):
+            - =(securityContext):
+                =(runAsNonRoot): true
+                =(runAsUser): '1-65535'
+                =(seLinuxOptions):
                   level: "?*"
-            containers:          
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(runAsNonRoot): true
+                =(runAsUser): '1-65535'
+                =(seLinuxOptions):
+                  level: "?*"				
+      # All containers and initContainers must define (not optional) runAsNonRoot=true.
+        - spec:
+            containers:
             - securityContext:
-                allowPrivilegeEscalation: false
+                runAsNonRoot: true
+                runAsUser: '1-65535'
+                seLinuxOptions:
+                  level: "?*"
+            =(initContainers):
+            - securityContext:
+                runAsNonRoot: true
+                runAsUser: '1-65535'
+                seLinuxOptions:
+                  level: "?*"
+            =(ephemeralContainers):
+            - securityContext:
+                runAsNonRoot: true
+                runAsUser: '1-65535'
                 seLinuxOptions:
                   level: "?*"
     - name: restricted-volumes
