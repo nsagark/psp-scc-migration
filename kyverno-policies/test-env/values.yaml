@@ -1,11 +1,9 @@
-# Default values for nirmata-kyverno.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 profile: "prod"
 
 licenseKey: ["add_licence_key"]
 predeletehookimage: "ghcr.io/nirmata/hyperkube:v1.16.12"
+
+
 
 cloudPlatform: ""
 
@@ -74,7 +72,7 @@ kyverno:
         extraResources: []
   templating:
     enabled: false
-    image: bitnami/kubectl:latest
+    image: ghcr.io/nirmata/kubectl:1.28.5
   webhooksCleanup:
     enable: false
   crds:
@@ -125,7 +123,7 @@ kyverno:
     # -- Image repository
     repository: ghcr.io
     # -- Image tag
-    tag: v1.10.5-n4k.nirmata.1
+    tag: v1.10.6-n4k.nirmata.3
 
   # -- Override default exclude namespaces (default kyverno, kube-system, nirmata, nirmata-system )
   excludedNamespacesForWebhook: []

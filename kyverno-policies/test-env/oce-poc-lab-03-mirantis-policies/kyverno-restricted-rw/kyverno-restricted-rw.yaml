@@ -1,18 +1,18 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: restricted-access
+  name: visa-restricted-rw
   annotations:
-    policies.kyverno.io/title: Restrict access
+    policies.kyverno.io/title: Visa Restrict rw access
     policies.kyverno.io/category: Visa-Custom
     policies.kyverno.io/severity: medium
     policies.kyverno.io/subject: Pod
     kyverno.io/kyverno-version: 1.9.2
     kyverno.io/kubernetes-version: "1.23-1.26"
     policies.kyverno.io/description: >-
-      Custom Policy for restricted access deployment at Visa
+      Custom Policy for rw restricted access deployment at Visa
 spec:
-  validationFailureAction: Enforce
+  validationFailureAction: Audit
   background: true
   rules:
     - name: securityContext-hostlevelvalidation
@@ -21,53 +21,69 @@ spec:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - cv-tekton-pipelines
+              - synk  
       validate:
         message: >-
-          Policy for Restricted Access.        
-        pattern:
-          spec:            
-            =(hostNetwork): false
-            =(hostIPC): false
-            =(hostPID): false  
+          Policy for RW Restricted Access.        
+        anyPattern:
+      # spec.securityContext.runAsNonRoot must be set to true. If containers and/or initContainers exist which declare a securityContext field, those must have runAsNonRoot also set to true.
+        - spec:
             securityContext:
               runAsNonRoot: true
               fsGroup: '1-65535'
-              supplementalGroups: '1-65535'   
-            =(ephemeralContainers):          
-              securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
-                capabilities:
-                  drop:
-                    - all
+              supplementalGroups: "?*"
+              runAsUser: '1-65535'
+              #seLinuxOptions:
+              #  level: "?*"
+            containers:
+            - =(securityContext):
+                =(runAsNonRoot): true
+                =(runAsUser): '1-65535'
                 seLinuxOptions:
                   level: "?*"
-            =(initContainers):          
-              securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
-                privileged: false
-                capabilities:
-                  drop:
-                    - all
-                seLinuxOptions:
+            =(initContainers):
+            - =(securityContext):
+                =(runAsNonRoot): true
+                =(runAsUser): '1-65535'
+                =(seLinuxOptions):
                   level: "?*"
-            containers:          
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(runAsNonRoot): true
+                =(runAsUser): '1-65535'
+                =(seLinuxOptions):
+                  level: "?*"				
+      # All containers and initContainers must define (not optional) runAsNonRoot=true.
+        - spec:
+            containers:
             - securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
-                privileged: false
+                runAsNonRoot: true
+                runAsUser: '1-65535'
                 seLinuxOptions:
                   level: "?*"
-                capabilities:
-                  drop:
-                    - all             
+            =(initContainers):
+            - securityContext:
+                runAsNonRoot: true
+                runAsUser: '1-65535'
+                seLinuxOptions:
+                  level: "?*"
+            =(ephemeralContainers):
+            - securityContext:
+                runAsNonRoot: true
+                runAsUser: '1-65535'
+                seLinuxOptions:
+                  level: "?*"
     - name: restricted-volumes
       match:
         any:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - cv-tekton-pipelines
+              - synk  
       validate:
         message: >-
           Only the following types of volumes may be used: configMap, downwardAPI,
@@ -85,13 +101,16 @@ spec:
               - persistentVolumeClaim
               - projected
               - secret
-              - ''
+              - hostPath
     - name: ensure-hostpaths-readonly
       match:
         any:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - cv-tekton-pipelines
+              - synk  
       preconditions:
         all:
         - key: "{{ request.operation || 'BACKGROUND' }}"
@@ -120,7 +139,10 @@ spec:
         any:
         - resources:
             kinds:
-            - Pod
+              - Pod
+            namespaces:
+              - cv-tekton-pipelines
+              - synk  
       preconditions:
         all:
         - key: "{{ request.object.spec.volumes[?hostPath] | length(@) }}"
@@ -141,3 +163,43 @@ spec:
               - key: "{{ element.path  | to_string(@)  }}"
                 operator: NotEquals
                 value: "/dev/null"
+    - name: required-drop-capabilities
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+            namespaces:
+              - cv-tekton-pipelines
+              - synk  
+      preconditions:
+        all:
+        - key: "{{ request.operation || 'BACKGROUND' }}"
+          operator: NotEquals
+          value: DELETE
+      validate:
+        message: >-
+                    Any container needs to have KILL, MKNOD, SETUID, SETGID, SYS_CHROOT, NET_RAW capabilities.
+        foreach:
+          - list: request.object.spec.[ephemeralContainers, initContainers, containers][]
+            deny:
+              conditions:
+                any:
+                - key: KILL
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
+                - key: MKNOD
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
+                - key: SYS_CHROOT
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
+                - key: SETUID
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
+                - key: SETGID
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"
+                - key: NET_RAW
+                  operator: AnyNotIn
+                  value: "{{ element.securityContext.capabilities.drop[].to_upper(@) || `[]` }}"

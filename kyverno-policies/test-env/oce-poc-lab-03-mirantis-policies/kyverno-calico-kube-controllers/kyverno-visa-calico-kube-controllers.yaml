@@ -21,6 +21,9 @@ spec:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - kyverno
+              - nirmata-system
       validate:
         message: >-
           Policy for calico-kube-controllers.        
@@ -80,13 +83,16 @@ spec:
                 =(seLinuxOptions):
                   level: "?*"			         
               =(ports): 
-               - =(hostPort): '0-65535'		
+               - =(hostPort): '0-65535'		         
     - name: restricted-volumes
       match:
         any:
         - resources:
             kinds:
               - Pod
+            namespaces:
+              - kyverno
+              - nirmata-system
       validate:
         message: >-
           Only the following types of volumes may be used: configMap, downwardAPI,

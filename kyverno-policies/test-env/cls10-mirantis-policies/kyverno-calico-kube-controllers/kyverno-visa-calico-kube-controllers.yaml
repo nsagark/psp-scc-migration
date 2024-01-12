@@ -27,38 +27,63 @@ spec:
       validate:
         message: >-
           Policy for calico-kube-controllers.        
-        pattern:
-          spec:
-            securityContext:
-              runAsNonRoot: true
-              fsGroup: '1-65535'
-              supplementalGroups: '1-65535'   
-            =(ephemeralContainers):          
-              securityContext:
-                allowPrivilegeEscalation: false
-                capabilities:
-                  drop:
-                    - all
-                seLinuxOptions:
+        anyPattern:
+      # spec.securityContext.runAsNonRoot must be set to true. If containers and/or initContainers exist which declare a securityContext field, those must have runAsNonRoot also set to true.
+        - spec:
+            securityContext:              
+              fsGroup: '1-65535'			  
+              supplementalGroups: '1-65535'
+              =(runAsUser): '1-65535' 			   
+            containers:
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'		
+                =(seLinuxOptions):
                   level: "?*"
-            =(initContainers):          
-              securityContext:
-                allowPrivilegeEscalation: false
-                privileged: false
-                capabilities:
-                  drop:
-                    - all
-                seLinuxOptions:
+              =(ports): 
+               - =(hostPort): '0-65535'		
+            =(initContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'		
+                =(seLinuxOptions):
                   level: "?*"
-            containers:          
-            - securityContext:
-                allowPrivilegeEscalation: false
-                privileged: false
-                seLinuxOptions:
+              =(ports): 
+               - =(hostPort): '0-65535'		                  
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'		
+                =(seLinuxOptions):
+                  level: "?*"				
+              =(ports): 
+               - =(hostPort): '0-65535'		
+      # All containers and initContainers must define (not optional) runAsNonRoot=true.
+        - spec:
+            containers:
+            - securityContext:                
+                =(runAsUser): '1-65535'
+                =(allowPrivilegeEscalation): "false"
+                =(seLinuxOptions):
                   level: "?*"
-                capabilities:
-                  drop:
-                    - all             
+              =(ports): 
+               - =(hostPort): '0-65535'		
+            =(initContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'		
+                =(seLinuxOptions):
+                  level: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'		
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'		
+                =(seLinuxOptions):
+                  level: "?*"			         
+              =(ports): 
+               - =(hostPort): '0-65535'		         
     - name: restricted-volumes
       match:
         any:
@@ -78,6 +103,7 @@ spec:
             - key: "{{ request.object.spec.volumes[].keys(@)[] || '' }}"
               operator: AnyNotIn
               value:
+              - name
               - configMap
               - downwardAPI
               - emptyDir
@@ -85,28 +111,3 @@ spec:
               - projected
               - secret
               - ''
-    - name: host-ports-restriction
-      match:
-        any:
-        - resources:
-            kinds:
-              - Pod
-            namespaces:
-              - nirmata-kyverno-operator-5754b644fb-*
-              - nirmata-system
-      validate:
-        message: >-
-          Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort
-          , spec.initContainers[*].ports[*].hostPort, and spec.ephemeralContainers[*].ports[*].hostPort
-          must either be unset or set between `0-65535`.          
-        pattern:
-          spec:
-            =(ephemeralContainers):
-              - =(ports):
-                  - =(hostPort): "0-65535"
-            =(initContainers):
-              - =(ports):
-                  - =(hostPort): "0-65535"
-            containers:
-              - =(ports):
-                  - =(hostPort): "0-65535"
