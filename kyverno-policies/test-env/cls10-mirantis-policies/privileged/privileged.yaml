@@ -32,95 +32,63 @@ spec:
       validate:
         message: >-
           Policy for privileged Access.        
-        pattern:
-          spec:  
-            =(hostNetwork): "true|false" 
-            =(hostIPC): "true|false" 
-            =(hostPID): "true|false"   
-            =(securityContext):
-              =(runAsUser): "*"
-              =(runAsGroup): "*"
-              =(fsGroup): "*"
-              =(supplementalGroups): "*"
-              =(allowPrivilegeEscalation): "true|false"  
-              =(privileged): "true|false"
-              =(seLinuxOptions):
-                =(level): "?*"
-    - name: securityContext-containerlevelvalidation
-      match:
-        any:
-        - resources:
-            kinds:
-              - Pod
-            namespaces:
-              - 0070081-k8ssandra2
-              - kyverno
-              - msr
-              - node-feature-discovery 
-              - splunk-k8
-              - tigera-packetcapture
-              - vxflexos              
-      preconditions:
-        all:
-        - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
-          operator: Equals
-          value: 0
-      validate:
-        message: >-
-          Policy for privileged Access. 
-        pattern:
-          spec:   
-            =(ephemeralContainers):          
-            - =(securityContext):
-                =(allowPrivilegeEscalation): "true|false"  
-                =(privileged): "true|false"
-                =(seLinuxOptions):
-                  =(level): "?*"
-              =(ports): 
-               - =(hostPort): '0-65535'
-            =(initContainers):          
-            - =(securityContext):
-                =(allowPrivilegeEscalation): "true|false"  
-                =(privileged): "true|false"
-                =(seLinuxOptions?):
-                  =(level): "?*"
-              =(ports): 
-               - =(hostPort): '0-65535'
-            containers:          
-            - =(securityContext):
-                =(allowPrivilegeEscalation): "true|false"  
-                =(privileged): "true|false"
-                =(seLinuxOptions):
-                  =(level): "?*"          
-              =(ports): 
-               - =(hostPort): '0-65535'
-    - name: host-ports-restriction
-      match:
-        any:
-        - resources:
-            kinds:
-              - Pod
-            namespaces:
-              - 0070081-k8ssandra2
-              - kyverno
-              - msr
-              - node-feature-discovery 
-              - splunk-k8
-              - tigera-packetcapture
-              - vxflexos
-      validate:
-        message: >-
-          Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort
-          , spec.initContainers[*].ports[*].hostPort, and spec.ephemeralContainers[*].ports[*].hostPort
-          must either be unset or set between `0-65535`.          
-        pattern:
-          spec:
-            =(ephemeralContainers):
-              - =(ports):
-                  - =(hostPort): "0-65535"
-            =(initContainers):
-              - =(ports):
-                  - =(hostPort): "0-65535"
+        anyPattern:
+      # spec.securityContext.runAsNonRoot must be set to true. If containers and/or initContainers exist which declare a securityContext field, those must have runAsNonRoot also set to true.
+        - spec:
+            =(hostNetwork): "true|false"
+            =(hostIPC): "true|false"
+            =(hostPID): "true|false" 
+            securityContext:              
+              fsGroup: '*'			  
+              supplementalGroups: '*'
+              runAsUser: '*'		   
             containers:
-              - =(ports):
-                  - =(hostPort): "0-65535"
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  level: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'		
+            =(initContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  level: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'		
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  level: "?*"				
+              =(ports): 
+               - =(hostPort): '0-65535'				
+      # All containers and initContainers must define (not optional) runAsNonRoot=true.
+        - spec:
+            containers:
+            - securityContext:                
+                =(runAsUser): '*'	
+                =(allowPrivilegeEscalation): "true|false"
+                seLinuxOptions:
+                  level: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'			
+            =(initContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  level: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'				
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  level: "?*"				
+              =(ports): 
+               - =(hostPort): '0-65535'				

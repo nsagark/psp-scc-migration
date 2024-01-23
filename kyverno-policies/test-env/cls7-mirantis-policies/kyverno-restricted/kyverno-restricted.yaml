@@ -38,109 +38,93 @@ spec:
               - cluster-validation-tests       
               - envoy-oi-system-*
               - envoy-system-*
-              - opera-monitor
+              - opera-monitor 
       validate:
         message: >-
-          Policy for Restricted Access.   
-        pattern:
-          spec:            
-            =(securityContext):
-              =(runAsUser): "*"
-              =(runAsGroup): "*"
-              =(fsGroup): "*"
-              =(supplementalGroups): "*"
-              =(runAsNonRoot): "true|false"
-              =(allowPrivilegeEscalation): "true|false"  
-              =(privileged): "true|false"
-              =(capabilities):
-                  =(drop):
-                    - all
-              =(seLinuxOptions):
-                =(level): "?*"
-    - name: securityContext-containerlevelvalidation
-      exclude:
-        any:
-        - resources:
-            kinds:
-              - Pod
-            namespaces:
-              - calico-system
-              - istio-*
-              - kube-system
-              - prometheus-operator
-              - tigera-*   
-              - nirmata-system
-              - kyverno
-      match:
-        any:
-        - resources:
-            kinds:
-              - Pod
-            namespaces:
-              - cluster-validation-tests       
-              - envoy-oi-system-*
-              - envoy-system-*
-              - opera-monitor
-      preconditions:
-        all:
-        - key: "{{ request.object.spec.securityContext || '' | length(@) }}"
-          operator: Equals
-          value: 0
-      validate:
-        message: >-
-          Policy for privileged Access. 
-        pattern:
-          spec:   
-            =(ephemeralContainers):          
+          Policy for Restricted Access. 
+        anyPattern:
+      # spec.securityContext.runAsNonRoot must be set to true. If containers and/or initContainers exist which declare a securityContext field, those must have runAsNonRoot also set to true.
+        - spec:
+            securityContext:              
+              fsGroup: '1-65535'			  
+              supplementalGroups: '1-65535'
+              =(runAsUser): '1-65535' 			   
+            containers:
             - =(securityContext):
-                =(allowPrivilegeEscalation): "true|false"  
-                =(readOnlyRootFilesystem): "true|false"
-                =(privileged): "true|false"
+                =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'
+                =(readOnlyRootFilesystem): "true"
                 =(capabilities):
                     =(drop):
-                      - all
+                      - all			
                 =(seLinuxOptions):
-                  =(level): "?*"
-              =(ports): 
-               - =(hostPort): '0-65535'
-            =(initContainers):          
+                  level: "?*"
+            =(initContainers):
             - =(securityContext):
-                =(allowPrivilegeEscalation): "true|false"  
-                =(readOnlyRootFilesystem): "true|false"
-                =(privileged): "true|false"
+                =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'
+                =(readOnlyRootFilesystem): "true"
                 =(capabilities):
                     =(drop):
-                      - all
+                      - all			
                 =(seLinuxOptions):
-                  =(level): "?*"
-              =(ports): 
-               - =(hostPort): '0-65535'
-            containers:          
+                  level: "?*"
+            =(ephemeralContainers):
             - =(securityContext):
-                =(allowPrivilegeEscalation): "true|false"  
-                =(readOnlyRootFilesystem): "true|false"
-                =(privileged): "true|false"
+                =(allowPrivilegeEscalation): "false"
+                =(runAsUser): '1-65535'
+                =(readOnlyRootFilesystem): "true"
                 =(capabilities):
                     =(drop):
-                      - all
+                      - all			
                 =(seLinuxOptions):
-                  =(level): "?*"
-              =(ports): 
-               - =(hostPort): '0-65535'          
+                  level: "?*"				
+      # All containers and initContainers must define (not optional) runAsNonRoot=true.
+        - spec:
+            containers:
+            - securityContext:                
+                runAsUser: '1-65535'
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: 
+                    - all 
+                seLinuxOptions:
+                  level: "?*"
+            =(initContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "false"
+                =(readOnlyRootFilesystem): "true"
+                =(runAsUser): '1-65535'
+                =(capabilities):
+                    =(drop):
+                      - all			
+                =(seLinuxOptions):
+                  level: "?*"
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "false"
+                =(readOnlyRootFilesystem): "true"
+                =(runAsUser): '1-65535'
+                =(capabilities):
+                    =(drop):
+                      - all			
+                =(seLinuxOptions):
+                  level: "?*"							       
     - name: restricted-volumes
       exclude:
         any:
         - resources:
             kinds:
               - Pod
-            namespaces:
+            namespaces:              
               - calico-system
               - istio-*
               - kube-system
               - prometheus-operator
               - tigera-*   
               - nirmata-system
-              - kyverno
+              - kyverno  
       match:
         any:
         - resources:
@@ -150,7 +134,7 @@ spec:
               - cluster-validation-tests       
               - envoy-oi-system-*
               - envoy-system-*
-              - opera-monitor
+              - opera-monitor 
       validate:
         message: >-
           Only the following types of volumes may be used: configMap, downwardAPI,
@@ -183,7 +167,7 @@ spec:
               - prometheus-operator
               - tigera-*   
               - nirmata-system
-              - kyverno 
+              - kyverno  
       match:
         any:
         - resources:
@@ -193,7 +177,7 @@ spec:
               - cluster-validation-tests       
               - envoy-oi-system-*
               - envoy-system-*
-              - opera-monitor
+              - opera-monitor 
       preconditions:
         all:
         - key: "{{ request.operation || 'BACKGROUND' }}"
@@ -230,7 +214,7 @@ spec:
               - prometheus-operator
               - tigera-*   
               - nirmata-system
-              - kyverno 
+              - kyverno  
       match:
         any:
         - resources:
@@ -240,7 +224,7 @@ spec:
               - cluster-validation-tests       
               - envoy-oi-system-*
               - envoy-system-*
-              - opera-monitor
+              - opera-monitor 
       preconditions:
         all:
         - key: "{{ request.object.spec.volumes[?hostPath] | length(@) }}"
