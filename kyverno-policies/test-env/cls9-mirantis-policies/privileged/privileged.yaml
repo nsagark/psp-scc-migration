@@ -23,7 +23,6 @@ spec:
               - Pod
             namespaces:
               - kube-system
-              - node-feature-discovery
       validate:
         message: >-
           Policy for privileged Access.        
