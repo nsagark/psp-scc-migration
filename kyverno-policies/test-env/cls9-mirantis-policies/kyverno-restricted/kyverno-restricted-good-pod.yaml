@@ -1,20 +1,21 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name:  privileged-bad-pod
+  name: restricted-good-pod
 spec:
   hostNetwork: false
-  hostPID: false
+  hostPID: false 
   hostIPC: false
   securityContext:
+    runAsNonRoot: true
     runAsUser: 1000
     fsGroup: 1001
     supplementalGroups: [2002]
   volumes:
   - name: config-vol
-    hostPath: 
-      path: /var/lib/docker/volumes/*certs
-      type: Directory
+    hostPath:
+      path: /dev/null
+      type: DirectoryOrCreate
   containers:
   - name: container01
     image: busybox
@@ -23,18 +24,18 @@ spec:
       - "3600"
     volumeMounts:
     - name: config-vol
-      mountPath: /var/lib/docker/volumes/*certs
+      mountPath: /dev/null
       readOnly: true
+    ports: 
+    - name: test
+      hostPort: 80
+      containerPort: 80
     securityContext:
       allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
       privileged: false
       capabilities:
-        add:
-          - KILL
-          - MKNOD
-          - SYS_CHROOT
-          - SETUID
-          - SETGID
-          - NET_RAW 
+        drop:
+          - all
       seLinuxOptions:
         level: "s0:c123,c456"

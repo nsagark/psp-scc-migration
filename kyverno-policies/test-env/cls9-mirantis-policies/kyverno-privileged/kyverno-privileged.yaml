@@ -23,6 +23,9 @@ spec:
               - Pod
             namespaces:
               - calico-system
+              - istio-gateway 
+              - istio-system
+              - prometheus-operator  
               - kube-system
               - tigera-*
       validate:
