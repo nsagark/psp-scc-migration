@@ -23,6 +23,11 @@ spec:
               - Pod
             namespaces:
               - calico-system
+              - cluster-validation-tests 
+              - istio-gateway 
+              - istio-system
+              - opera-monitor 
+              - prometheus-operator  
               - kube-system
               - tigera-*
       validate:
