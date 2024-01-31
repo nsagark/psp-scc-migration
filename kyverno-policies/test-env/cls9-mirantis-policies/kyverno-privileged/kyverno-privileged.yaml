@@ -36,11 +36,7 @@ spec:
         - spec:
             =(hostNetwork): "true|false"
             =(hostIPC): "true|false"
-            =(hostPID): "true|false" 
-            securityContext:              
-              fsGroup: '*'			  
-              supplementalGroups: '*'
-              runAsUser: '*'		   
+            =(hostPID): "true|false"       		   
             containers:
             - =(securityContext):
                 =(allowPrivilegeEscalation): "true|false"
@@ -71,7 +67,7 @@ spec:
             - securityContext:                
                 =(runAsUser): '*'	
                 =(allowPrivilegeEscalation): "true|false"
-                seLinuxOptions:
+                =(seLinuxOptions):
                   level: "?*"
               =(ports): 
                - =(hostPort): '0-65535'			
