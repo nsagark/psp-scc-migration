@@ -86,4 +86,58 @@ spec:
                 =(seLinuxOptions):
                   level: "?*"				
               =(ports): 
+               - =(hostPort): '0-65535'		
+        - spec:
+            =(hostNetwork): "true|false"
+            =(hostIPC): "true|false"
+            =(hostPID): "true|false"       		   
+            containers:
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  type: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'		
+            =(initContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  type: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'		
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  type: "?*"				
+              =(ports): 
                - =(hostPort): '0-65535'				
+      # All containers and initContainers must define (not optional) runAsNonRoot=true.
+        - spec:
+            containers:
+            - securityContext:                
+                =(runAsUser): '*'	
+                =(allowPrivilegeEscalation): "true|false"
+                =(seLinuxOptions):
+                  type: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'			
+            =(initContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  type: "?*"
+              =(ports): 
+               - =(hostPort): '0-65535'				
+            =(ephemeralContainers):
+            - =(securityContext):
+                =(allowPrivilegeEscalation): "true|false"
+                =(runAsUser): '*'	
+                =(seLinuxOptions):
+                  type: "?*"				
+              =(ports): 
+               - =(hostPort): '0-65535'
