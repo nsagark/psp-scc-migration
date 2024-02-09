@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name:  privileged-bad-pod
+  name:  good-pod
 spec:
   hostNetwork: false
   hostPID: false
@@ -11,10 +11,9 @@ spec:
     fsGroup: 1001
     supplementalGroups: [2002]
   volumes:
-  - name: config-vol
-    hostPath:
-      path: /dev/test
-      type: DirectoryOrCreate
+  - name: configMap
+    configMap:
+      name: test123
   containers:
   - name: container01
     image: busybox
@@ -22,10 +21,21 @@ spec:
       - sleep
       - "3600"
     volumeMounts:
-    - name: config-vol
-      mountPath: /etc/config
+    - name: configMap
+      mountPath: /run
+      readOnly: true
     securityContext:
+      runAsNonRoot: true
       allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
       privileged: false
+      capabilities:
+        drop:
+          - KILL
+          - MKNOD
+          - SYS_CHROOT
+          - SETUID
+          - SETGID
+          - NET_RAW 
       seLinuxOptions:
         level: "s0:c123,c456"

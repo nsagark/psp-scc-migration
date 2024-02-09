@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name:  visa-hostaccess-bad-pod
+  name:  bad-pod
 spec:
   hostNetwork: true
   hostPID: true
