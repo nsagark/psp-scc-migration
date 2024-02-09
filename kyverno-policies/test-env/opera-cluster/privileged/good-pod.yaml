@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name:  privileged-bad-pod
+  name:  good-pod
 spec:
-  hostNetwork: false
-  hostPID: false
-  hostIPC: false
+  hostNetwork: true
+  hostPID: true 
+  hostIPC: true
   securityContext:
     runAsUser: 1000
     fsGroup: 1001
     supplementalGroups: [2002]
   volumes:
   - name: config-vol
-    hostPath:
-      path: /dev/test
-      type: DirectoryOrCreate
+    hostPath: 
+      path: /var/lib/docker/volumes/*certs
+      type: Directory
   containers:
   - name: container01
     image: busybox
@@ -23,9 +23,14 @@ spec:
       - "3600"
     volumeMounts:
     - name: config-vol
-      mountPath: /etc/config
+      mountPath: /var/lib/docker/volumes/*certs
+      readOnly: true
     securityContext:
-      allowPrivilegeEscalation: false
-      privileged: false
+      runAsNonRoot: true
+      allowPrivilegeEscalation: true
+      privileged: true
+      capabilities:
+        add:
+          - all 
       seLinuxOptions:
         level: "s0:c123,c456"

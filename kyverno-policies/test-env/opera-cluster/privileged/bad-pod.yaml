@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name:  unprivileged-bad-pod
-spec:  
-  hostNetwork: true
-  hostPID: true
-  hostIPC: true
+  name:  bad-pod
+spec:
+  hostNetwork: false
+  hostPID: false
+  hostIPC: false
   securityContext:
     runAsUser: 1000
     fsGroup: 1001
@@ -25,10 +25,7 @@ spec:
     - name: config-vol
       mountPath: /etc/config
     securityContext:
-      allowPrivilegeEscalation: true
-      privileged: true
-      capabilities:
-        add:
-          - all
+      allowPrivilegeEscalation: false
+      privileged: false
       seLinuxOptions:
         level: "s0:c123,c456"
